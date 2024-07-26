@@ -9,10 +9,13 @@ import { SharedService } from '../../shared.service';
 })
 export class AdminDashboardComponent implements OnInit {
 
+  allRequestCount: any ={}
+
   constructor(private _router: Router, private _sharedService: SharedService) { }
 
   ngOnInit() {
     this.checkUserAuthentication()
+    this.getAllRequestCount()
   }
 
   private checkUserAuthentication(): void {
@@ -21,5 +24,20 @@ export class AdminDashboardComponent implements OnInit {
       this._router.navigate(['/login']);
     }
   }
+
+  private getAllRequestCount(): void{
+    this._sharedService.getAllRequestCount().subscribe({
+     next: (response: any) => {
+         this.allRequestCount=response;
+     },
+     error: (err) => {
+ 
+         }
+        });
+     }
+
+    public handleChildEvent(data: any) {
+        this.getAllRequestCount();
+    }
 
 }

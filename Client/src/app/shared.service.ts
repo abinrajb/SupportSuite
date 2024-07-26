@@ -46,6 +46,10 @@ export class SharedService {
         return this._http.get<Admins[]>('/getAllAdmins');
     }
 
+    getUsers(): Observable<Admins[]> {
+        return this._http.get<Admins[]>('/getAllUsers');
+    }
+
     setLoggedInUser(user: any): void {
         this.loggedInUser = user;
     }
@@ -84,6 +88,14 @@ export class SharedService {
 
     getAllAssignedToMe(approvedticketFetchPayLoad:any) : Observable<InproInterface>{
         return this._http.post<InproInterface>(`/getAllAssignedToMeTickets`,approvedticketFetchPayLoad);
+    }
+
+    statusChangeToApprovedOrRejected(ApprovedOrRejectedPayLoad:any) : Observable<InproInterface>{
+        return this._http.post<InproInterface>(`/statusChangeToApprovedOrRejected`,ApprovedOrRejectedPayLoad);
+    }
+
+    makeNewAdmin(newAdminPayLoad:any): Observable<InproInterface>{
+        return this._http.post<InproInterface>(`/makeAdmin`,newAdminPayLoad);
     }
 
 }

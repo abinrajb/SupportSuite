@@ -23,8 +23,8 @@ export class LoginComponent implements OnInit {
     }
 
     ngOnInit() {
-        this.loginObj.userName = 'shylam';
-        this.loginObj.password = 'password123'
+        this.loginObj.userName = 'arunraj';
+        this.loginObj.password = 'safe123'
     }
 
     private displayErrorMessage(key: string, value: string): void {

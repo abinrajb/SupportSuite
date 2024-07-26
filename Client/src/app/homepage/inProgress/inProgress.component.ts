@@ -5,6 +5,7 @@ import { Category } from './inpro-interface';
 import { Admins } from '../../interface';
 import { TicketFetchPayLoad } from '../../interface';
 import Swal from 'sweetalert2';
+import { EditReqObjPayload } from '../homePageInterface';
 
 @Component({
     selector: 'app-inProgress',
@@ -25,11 +26,11 @@ export class InProgressComponent implements OnInit {
   categories: Category[] = [];
   administrator: Admins[] = [];
   allRequestCount: any ={};
-  editReqObjPayload: any = {
-    category: '',
+  editReqObjPayload: EditReqObjPayload = {
     requestDescription: '',
-    personId: null,
-    ticketId: null
+    ticketId: 0,
+    personId: 0,
+    category: ''
   };
   assignTicketObj: any = {
     ticketId: null,

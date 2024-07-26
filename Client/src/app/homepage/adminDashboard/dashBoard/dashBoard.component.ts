@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 import { SharedService } from '../../../shared.service';
 import { TicketFetchPayLoad } from '../../../interface';
 import { Router } from '@angular/router';
@@ -9,11 +9,20 @@ import { Router } from '@angular/router';
   styleUrls: ['./dashBoard.component.css']
 })
 export class DashBoardComponent implements OnInit {
+
+   @Output() countEvent: EventEmitter<any> = new EventEmitter();
+
+
   loggedInUser: any;
   pageNumber:number=0;
   totalPages: number = 0;
   allRequestCount: any ={}
   allAssignedTickets: any = [];
+  TicketApproveOrRejectDTO: any={
+    statusCode:null,
+    comment:'',
+    ticketId:null
+  }
 
   constructor(private _sharedService:SharedService , private _router: Router) { }
 
@@ -21,6 +30,7 @@ export class DashBoardComponent implements OnInit {
     this.checkUserAuthentication()
     this.loggedInUser = this._sharedService.getLoggedInUser();
     this.getAllRequestCount()
+    this.getAllAssignedToMe()
   }
 
   private checkUserAuthentication(): void {
@@ -68,6 +78,32 @@ export class DashBoardComponent implements OnInit {
       });
     }
 
+    public currentTicket(ticket: any): void {
+        this.TicketApproveOrRejectDTO.ticketId = ticket;
+    }
+
+
+    public isApproveReject(status:number): void{
+        this.TicketApproveOrRejectDTO.statusCode=status;
+        console.log(this.TicketApproveOrRejectDTO)
+        this._sharedService.statusChangeToApprovedOrRejected(this.TicketApproveOrRejectDTO).subscribe({
+            next: (response: any) => {
+                console.log(this.TicketApproveOrRejectDTO);
+                this.getAllAssignedToMe();
+                this.setComment();
+                this.countEvent.emit('check count');
+            },
+            error: (err) => {
+              console.error('Failed to fetch tickets', err);
+            }
+          });
+
+        
+    }
+
+
+
+
       
     public getTime(timestamp: string): string {
         const NOW = new Date();
@@ -94,6 +130,10 @@ export class DashBoardComponent implements OnInit {
         } else {
             return SECONDSAGO === 1 ? '1 second ago' : `${SECONDSAGO} seconds ago`;
         }
+      }
+
+      public setComment(){
+        this.TicketApproveOrRejectDTO.comment='';
       }
   
       public getPagesArray(): number[] {

@@ -1,3 +1,8 @@
-<p>
-  newAdmin works!
-</p>
+<label for="exampleDataList" class="form-label">Make Admin</label>
+<input class="form-control" [(ngModel)]="makeAdminPayload.personId" list="datalistOptions" id="exampleDataList" placeholder="Type to search...">
+<datalist id="datalistOptions">
+  <option value="" disabled selected>Select user</option>
+  <option *ngFor="let user of allUsers" [value]="user.personId">{{ user.name }}</option>
+</datalist>
+<button class="btn btn-success" (click)="makeAdmin()">Make Admin</button>
+
