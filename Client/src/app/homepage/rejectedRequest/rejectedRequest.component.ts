@@ -5,7 +5,7 @@ import { TicketFetchPayLoad } from '../../interface';
 
 @Component({
   selector: 'app-rejectedRequest',
-  templateUrl: './rejectedRequest.component.html',
+  templateUrl:'./rejectedRequest.component.html',
   styleUrls: ['./rejectedRequest.component.css']
 })
 export class RejectedRequestComponent implements OnInit {
