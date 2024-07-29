@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { InproInterface } from './homepage/inProgress/inpro-interface';
-import { Ticket, StatusDescription, Category, Admins, Country } from './interface';
+import { Category, Admins, Country } from './interface';
 import { Router } from '@angular/router';
 
 
@@ -96,6 +96,10 @@ export class SharedService {
 
     makeNewAdmin(newAdminPayLoad:any): Observable<InproInterface>{
         return this._http.post<InproInterface>(`/makeAdmin`,newAdminPayLoad);
+    }
+
+    createNewServiceCategory(newServicePayLoad:any): Observable<InproInterface>{
+        return this._http.post<InproInterface>(`/createNewServiceCategory`,newServicePayLoad);
     }
 
 }

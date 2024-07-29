@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { SharedService } from '../../../shared.service';
 import { Router } from '@angular/router';
 import { Admins } from '../../../interface';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-newAdmin',
@@ -42,6 +43,13 @@ export class NewAdminComponent implements OnInit {
     this.makeAdminPayload.adminID=this.loggedInUser.personId;
     this._sharedService.makeNewAdmin(this.makeAdminPayload).subscribe({
         next: (any) => {
+            Swal.fire({
+                position: "center",
+                icon: "success",
+                title: "New service category created",
+                showConfirmButton: false,
+                timer: 1500
+            });
         },
         error: (err) => {
           console.error('Failed to fetch users', err);

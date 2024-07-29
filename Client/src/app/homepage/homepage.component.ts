@@ -11,6 +11,8 @@ import { SharedService } from '../shared.service';
 export class HomepageComponent implements OnInit{
 
   isDropdownVisible: boolean = false;
+  isLoggedIn: any = null;
+  LoggedInUser: any ='';
 
   constructor(private _router: Router, private _sharedService: SharedService) {}
   
@@ -20,10 +22,16 @@ export class HomepageComponent implements OnInit{
 
 
   private checkUserAuthentication(): void {
-    const isLoggedIn = !!this._sharedService.getLoggedInUser();
-    if (!isLoggedIn) {
+    this.isLoggedIn = !!this._sharedService.getLoggedInUser();
+    this.LoggedInUser = this._sharedService.getLoggedInUser();
+
+    if (!this.isLoggedIn) {
       this._router.navigate(['/login']);
     }
+  }
+  public isAdmin(): boolean {
+    console.log(this.isLoggedIn)
+    return this.LoggedInUser?.roles.some((role: any) => role.roleId === 1)
   }
 
   public toggleDropdown(event: Event): void {

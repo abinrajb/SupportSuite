@@ -14,7 +14,7 @@
             </tr>
           </thead>
           <tbody>
-            <tr *ngFor="let ticket of allAssignedTickets; let i = index" tabindex="1" class="ticket-card" id="ticket-{{ i }}">
+            <tr *ngFor="let ticket of allAssignedTickets; let i = index" tabindex="0" class="ticket-card" id="ticket-{{ i }}">
               <td>
                 <div class="d-flex align-items-center" id="profile-pic-container-{{ i }}">
                   <img
@@ -28,11 +28,11 @@
                 </div>
               </td>
               <td id="request-category-{{ i }}">
-                <p class="fw-bold mb-1">{{ ticket?.category.categoryName }}</p>
+                <p class="fw-bold mb-1">{{ ticket?.category?.categoryName }}</p>
               </td>
               <td class="description" id="request-description-{{ i }}">{{ ticket?.requestDescription }}</td>
               <td id="request-status-{{ i }}">
-                <span class="badge bg-success">{{ ticket?.statusDescription.status }}</span>
+                <span class="badge bg-success">{{ ticket?.statusDescription?.status }}</span>
               </td>
               <td id="created-time-{{ i }}">{{ getTime(ticket.updateTimestamp) }}</td>
               <td id="comments-{{ i }}">

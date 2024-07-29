@@ -60,7 +60,7 @@
               </a>
           </li>
           <li class="page-item" *ngFor="let page of getPagesArray()" title="Page number {{page + 1}}">
-              <a class="page-link" href="#" (click)="pageNumberFun(page)">{{ page + 1 }}</a>
+              <a class="page-link" (click)="pageNumberFun(page)">{{ page + 1 }}</a>
           </li>
           <li class="page-item">
               <a class="page-link" href="#" aria-label="Next">

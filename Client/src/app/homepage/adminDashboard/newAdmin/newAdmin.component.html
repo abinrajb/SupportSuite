@@ -1,8 +1,28 @@
-<label for="exampleDataList" class="form-label">Make Admin</label>
+<label for="exampleDataList" class="form-label">Make Admin<span class="text-danger">*</span></label>
 <input class="form-control" [(ngModel)]="makeAdminPayload.personId" list="datalistOptions" id="exampleDataList" placeholder="Type to search...">
 <datalist id="datalistOptions">
   <option value="" disabled selected>Select user</option>
   <option *ngFor="let user of allUsers" [value]="user.personId">{{ user.name }}</option>
 </datalist>
-<button class="btn btn-success" (click)="makeAdmin()">Make Admin</button>
+<button class="btn btn-success mt-2" data-bs-toggle="modal" data-bs-target="#newAdminPopUp">Make Admin</button>
 
+<div class="modal fade" id="newAdminPopUp" aria-labelledby="newAdminPopUpLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div *ngIf="makeAdminPayload.personId; else elseBlock" class="modal-body">
+                <div class="alert alert-success" tabindex="0" role="alert">
+                    Do you want to assign user as administrator?
+                </div>
+                <div class="d-flex justify-content-end">
+                    <button type="button" class="btn btn-outline-secondary me-1" title="Close" data-bs-dismiss="modal" tabindex="0" aria-label="Close New admin">Close</button>
+                    <button type="button" class="btn btn-outline-primary" title="Approve Ticket" (click)="makeAdmin()" data-bs-dismiss="modal" tabindex="0" aria-label="Approve button">Submit</button>
+                </div>
+            </div>
+           <ng-template #elseBlock>
+            <div class="alert alert-danger m-2 modal-body" tabindex="0" role="alert">
+                please fill all fields
+            </div>
+           </ng-template>
+        </div>
+    </div>
+</div>
