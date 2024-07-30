@@ -25,7 +25,7 @@
                             <div class="row gy-3 gy-md-4">
                                 <div class="col-12">
                                     <label for="username" tabindex="-1" class="form-label">User Name <span class="text-danger">*</span></label>
-                                    <input type="text" class="form-control" id="username" name="username"
+                                    <input type="text" class="form-control border-2" id="username" name="username"
                                         placeholder="User Name" [(ngModel)]="loginObj.userName" required
                                         aria-required="true" tabindex="0"  />
                                     <div *ngIf="this.map1.has('UserNameErrorMessage') && loginForm.submitted"
@@ -38,7 +38,7 @@
                                         Password<span class="text-danger">*</span>
                                     </label>
                                     <div class="input-group">
-                                        <input [type]="passwordFieldType" class="form-control" id="password"
+                                        <input [type]="passwordFieldType" class="form-control border-2" id="password"
                                                name="password" placeholder="Password" [(ngModel)]="loginObj.password" required
                                                aria-required="true" tabindex="0" aria-label="password field">
                                         <button type="button" aria-label="Toggle password visibility"

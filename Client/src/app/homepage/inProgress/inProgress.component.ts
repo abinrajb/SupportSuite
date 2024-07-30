@@ -7,6 +7,7 @@ import { TicketFetchPayLoad } from '../../interface';
 import Swal from 'sweetalert2';
 import { EditReqObjPayload } from '../homePageInterface';
 
+
 @Component({
     selector: 'app-inProgress',
     templateUrl: './inProgress.component.html',
@@ -48,7 +49,9 @@ export class InProgressComponent implements OnInit {
     this.getAllRequestCount();
   }
 
-
+  public isAdmin(): boolean {
+    return this.loggedInUser?.roles.some((role: any) => role.roleId === 1)
+  }
   private checkUserAuthentication(): void {
     const isLoggedIn = !!this._sharedService.getLoggedInUser();
     if (!isLoggedIn) {
@@ -216,6 +219,8 @@ export class InProgressComponent implements OnInit {
                 showConfirmButton: false,
                 timer: 2000
               });
+              this.assignTicketObj.assignedTo=0;
+
           }
         });
       }

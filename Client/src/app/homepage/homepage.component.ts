@@ -22,15 +22,13 @@ export class HomepageComponent implements OnInit{
 
 
   private checkUserAuthentication(): void {
-    this.isLoggedIn = !!this._sharedService.getLoggedInUser();
-    this.LoggedInUser = this._sharedService.getLoggedInUser();
-
-    if (!this.isLoggedIn) {
+    const loggedInUser = sessionStorage.getItem('loggedInUser');
+    if (!loggedInUser) {
       this._router.navigate(['/login']);
     }
+    this.LoggedInUser = this._sharedService.getLoggedInUser();
   }
   public isAdmin(): boolean {
-    console.log(this.isLoggedIn)
     return this.LoggedInUser?.roles.some((role: any) => role.roleId === 1)
   }
 

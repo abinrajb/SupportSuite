@@ -1,56 +1,55 @@
-<div class="card mb-3">
-    <div class="card-header d-flex justify-content-between">
-        <h5 id="admin-inbox-title">Admin Inbox</h5>
-        <a class="btn btn-success" tabindex="0" routerLinkActive="active" data-bs-toggle="collapse" 
-           data-bs-target="#collapseDashboard" aria-expanded="false" aria-controls="collapseDashboard" title="Show dashboard">
-            Dashboard
-            <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
-                {{allRequestCount.assignedToMeRequests}}
-                <span class="visually-hidden">unread messages</span>
-            </span>
-        </a>
-    </div>
-</div>
-
-<div class="card mb-3">
-    <div class="card-header d-flex justify-content-between">
-        <h5 id="assign-admin-title">Assign new Administrator</h5>
-        <a class="btn btn-success" tabindex="0" routerLinkActive="active" data-bs-toggle="collapse"
-           data-bs-target="#collapseNewAdmin" aria-expanded="false" aria-controls="collapseNewAdmin" title="Show create admin field">
+<div class="row justify-content-between m-3">
+    <div class="btn-group d-flex" role="group">
+        <button class="btn btn-success position-relative col-2 me-3" tabindex="0" routerLinkActive="active" data-bs-toggle="collapse" 
+        data-bs-target="#collapseDashboard" aria-expanded="false" aria-controls="collapseDashboard" title="Show dashboard">
+         Dashboard
+         <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+             {{allRequestCount.assignedToMeRequests}}
+             <span class="visually-hidden">unread messages</span>
+         </span>
+        </button>
+        <button type="button" class="btn btn-success position-relative col-2 me-3" 
+        data-bs-toggle="collapse" data-bs-target="#collapseRecords" aria-expanded="false" aria-controls="collapseRecords" title="Show Records">
+            Records
+        </button>
+        <button class="btn btn-success position-relative col-2 me-3" tabindex="0" routerLinkActive="active" data-bs-toggle="collapse"
+        data-bs-target="#collapseNewAdmin" aria-expanded="false" aria-controls="collapseNewAdmin" title="Show create admin field">
             New Admin
-        </a>
+        </button>
+        <button class="btn btn-success col-2" tabindex="0" routerLinkActive="active" data-bs-toggle="collapse" 
+        data-bs-target="#collapseNewService" aria-expanded="false" aria-controls="collapseNewService" title="Show add new service type">
+            New service type
+        </button>
     </div>
 </div>
 
-<div class="card mb-3">
-    <div class="card-header d-flex justify-content-between">
-        <h5 id="create-service-type-title">Create new service type</h5>
-        <a class="btn btn-success" tabindex="0" routerLinkActive="active" data-bs-toggle="collapse" 
-           data-bs-target="#collapseNewService" aria-expanded="false" aria-controls="collapseNewService" title="Show add new service type">
-            New service type
-        </a>
-    </div>
-</div>
 
 <div class="accordion" id="accordionExampleOne">
     <div class="accordion-item">
-        <div id="collapseNewAdmin" class="accordion-collapse collapse" aria-labelledby="assign-admin-title" data-bs-parent="#accordionExampleOne">
+        <div id="collapseNewAdmin" class="accordion-collapse collapse" data-bs-parent="#accordionExampleOne">
             <div class="accordion-body">
                 <app-newAdmin></app-newAdmin>
             </div>
         </div>
     </div>
     <div class="accordion-item">
-        <div id="collapseNewService" class="accordion-collapse collapse" aria-labelledby="create-service-type-title" data-bs-parent="#accordionExampleOne">
+        <div id="collapseNewService" class="accordion-collapse collapse" data-bs-parent="#accordionExampleOne">
             <div class="accordion-body">
                 <app-addService></app-addService>
             </div>
         </div>
     </div>
     <div class="accordion-item">
-        <div id="collapseDashboard" class="accordion-collapse collapse show" aria-labelledby="admin-inbox-title" data-bs-parent="#accordionExampleOne">
+        <div id="collapseDashboard" class="accordion-collapse collapse show" data-bs-parent="#accordionExampleOne">
             <div class="accordion-body">
                 <app-dashBoard (myEvent)="handleChildEvent($event)"></app-dashBoard>
+            </div>
+        </div>
+    </div>
+    <div class="accordion-item">
+        <div id="collapseRecords" class="accordion-collapse collapse" data-bs-parent="#accordionExampleOne">
+            <div class="accordion-body">
+                <app-history></app-history>
             </div>
         </div>
     </div>

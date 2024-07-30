@@ -6,7 +6,9 @@
     <label for="Add Description" class="form-label">Description<span class="text-danger">*</span></label>
     <textarea class="form-control" id="addDescription" rows="3" [(ngModel)]="newServicePayLoad.description" placeholder="Valid description about service"></textarea>
 </div>
-<button class="btn btn-success mt-2"  data-bs-toggle="modal" data-bs-target="#newServicePopUp">Submit</button>
+<div class="d-flex justify-content-end">
+    <button class="btn btn-success mt-2"  data-bs-toggle="modal" data-bs-target="#newServicePopUp">Submit</button>
+</div>
 
 <div class="modal fade" id="newServicePopUp" aria-labelledby="newServicePopUpLabel" aria-hidden="true">
     <div class="modal-dialog">

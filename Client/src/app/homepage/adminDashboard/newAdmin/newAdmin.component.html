@@ -4,7 +4,9 @@
   <option value="" disabled selected>Select user</option>
   <option *ngFor="let user of allUsers" [value]="user.personId">{{ user.name }}</option>
 </datalist>
-<button class="btn btn-success mt-2" data-bs-toggle="modal" data-bs-target="#newAdminPopUp">Make Admin</button>
+<div class="d-flex justify-content-end">
+    <button class="btn btn-success mt-2" data-bs-toggle="modal" data-bs-target="#newAdminPopUp">Make Admin</button>
+</div>
 
 <div class="modal fade" id="newAdminPopUp" aria-labelledby="newAdminPopUpLabel" aria-hidden="true">
     <div class="modal-dialog">

@@ -7,7 +7,7 @@
                 <a class="navbar-brand title" aria-label="website name" tabindex="0">SupportSuite</a>
             </div>
             <div class="d-flex justify-content-end align-items-center ms-auto">
-                <button class="navbar-toggler me-2" title="User Profile" id="userProfileButton" type="button" aria-label="user profile button" tabindex="0" (click)="userProfile($event)" aria-label="User Profile">
+                <button class="navbar-toggler me-2" title="{{LoggedInUser.userName}}" id="userProfileButton" type="button" aria-label="user profile button" tabindex="0" (click)="userProfile($event)" aria-label="User Profile">
                     <span class="bi bi-person-fill"></span>
                 </button>
                 <button class="navbar-toggler" title="logout Button" id="logoutButton" type="button" (click)="logout($event)" aria-label="Click here to logout">

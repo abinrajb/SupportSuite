@@ -30,12 +30,12 @@
               <td id="request-category-{{ i }}">
                 <p class="fw-bold mb-1">{{ ticket?.category?.categoryName }}</p>
               </td>
-              <td class="description" id="request-description-{{ i }}">{{ ticket?.requestDescription }}</td>
+              <td class="description" id="request-description-{{ i }}" title="{{ticket?.requestDescription}}">{{ ticket?.requestDescription }}</td>
               <td id="request-status-{{ i }}">
                 <span class="badge bg-success">{{ ticket?.statusDescription?.status }}</span>
               </td>
               <td id="created-time-{{ i }}">{{ getTime(ticket.updateTimestamp) }}</td>
-              <td id="comments-{{ i }}">
+              <td id="comments-{{ i }}" title="{{ ticket?.comment?.comment }}">
                   {{ ticket?.comment?.comment }}
               </td>
             </tr>

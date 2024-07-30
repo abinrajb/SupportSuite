@@ -13,6 +13,8 @@ export class DashBoardComponent implements OnInit {
    @Output() countEvent: EventEmitter<any> = new EventEmitter();
 
 
+  showRejectMessage: boolean = false;
+  showApproveMessage: boolean = false;
   loggedInUser: any;
   pageNumber:number=0;
   totalPages: number = 0;
@@ -50,6 +52,7 @@ export class DashBoardComponent implements OnInit {
          next: (response: any) => {
              this.allRequestCount=response;
              const totalRequestCount = response.assignedRequests; 
+             console.log(response);
              this.totalPages = Math.ceil(totalRequestCount / 10);
              this.getAllAssignedToMe();
          },
@@ -80,6 +83,8 @@ export class DashBoardComponent implements OnInit {
 
     public currentTicket(ticket: any): void {
         this.TicketApproveOrRejectDTO.ticketId = ticket;
+        this.showRejectMessage=false;
+        this.showApproveMessage=false;
     }
 
 
@@ -92,6 +97,8 @@ export class DashBoardComponent implements OnInit {
                 this.getAllAssignedToMe();
                 this.setComment();
                 this.countEvent.emit('check count');
+                this.showRejectMessage=false;
+                this.showApproveMessage=false;
             },
             error: (err) => {
               console.error('Failed to fetch tickets', err);
@@ -102,7 +109,16 @@ export class DashBoardComponent implements OnInit {
     }
 
 
+    public toggleApproveMessage() {
+        this.showApproveMessage = !this.showApproveMessage;
+        this.showRejectMessage = false;
+      }
 
+
+    public toggleRejectMessage() {
+    this.showRejectMessage = !this.showRejectMessage;
+    this.showApproveMessage=false;
+    }
 
       
     public getTime(timestamp: string): string {

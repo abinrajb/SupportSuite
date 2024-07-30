@@ -28,18 +28,18 @@
                       <td>
                           <p class="fw-bold mb-1">{{ ticket?.category?.categoryName }}</p>
                       </td>
-                      <td class="description">{{ ticket?.requestDescription }}</td>
+                      <td class="description" title="{{ticket?.requestDescription}}">{{ ticket?.requestDescription }}</td>
                       <td>
                           <span class="badge bg-danger">{{ ticket?.statusDescription?.status }}</span>
                       </td>
                       <td>{{ getTime(ticket.updateTimestamp) }}</td>
-                      <td>{{ ticket?.comment?.comment }}</td>
+                      <td class="description" title="{{ ticket?.comment?.comment }}">{{ ticket?.comment?.comment }}</td>
                   </tr>
               </tbody>
           </table>
       </div>
   </div>
-  <div class="d-flex justify-content-center align-items-center mt-3" role="navigation" aria-label="Pagination Navigation">
+  <div class="d-flex align-items-center mt-3" role="navigation" aria-label="Pagination Navigation">
       <nav aria-label="Page navigation example">
           <ul class="pagination">
               <li class="page-item">
