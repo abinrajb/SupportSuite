@@ -28,6 +28,8 @@ export class HomepageComponent implements OnInit{
     }
     this.LoggedInUser = this._sharedService.getLoggedInUser();
   }
+
+  
   public isAdmin(): boolean {
     return this.LoggedInUser?.roles.some((role: any) => role.roleId === 1)
   }

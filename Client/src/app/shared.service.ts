@@ -3,7 +3,6 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { InproInterface } from './homepage/inProgress/inpro-interface';
 import { Category, Admins, Country } from './interface';
-import { Router } from '@angular/router';
 
 
 @Injectable({
@@ -15,7 +14,7 @@ export class SharedService {
     private loggedInUser: any;
     private inProgressUser: any;
 
-    constructor(private _http: HttpClient, private _router: Router) { }
+    constructor(private _http: HttpClient) { }
 
     login(loginPayload: any): Observable<any> {
         return this._http.post<any>(`/log`, loginPayload);
@@ -52,10 +51,19 @@ export class SharedService {
 
     setLoggedInUser(user: any): void {
         this.loggedInUser = user;
+        sessionStorage.setItem('loggedInUser', JSON.stringify(user));
     }
-
+    
     getLoggedInUser(): any {
+    if (this.loggedInUser) {
         return this.loggedInUser;
+    }
+    const user = sessionStorage.getItem('loggedInUser');
+    if (user) {
+        this.loggedInUser = JSON.parse(user);
+        return this.loggedInUser;
+    }
+    return null;
     }
 
     setInProgress(user: any): void {
@@ -82,8 +90,10 @@ export class SharedService {
         return this._http.get<InproInterface>(`/getAllTickets/${this.loggedInUser.personId}`);
     }
 
-    clearUserSession() {
+    clearUserSession(): void {
         this.loggedInUser = null;
+        sessionStorage.removeItem('loggedInUser');
+        
     }
 
     getAllAssignedToMe(approvedticketFetchPayLoad:any) : Observable<InproInterface>{

@@ -22,16 +22,22 @@ export class NewAdminComponent implements OnInit {
   constructor(private _sharedService:SharedService , private _router:Router) {}
 
   ngOnInit() {
+    this.checkUserAuthentication();
     this.loggedInUser = this._sharedService.getLoggedInUser();
     this.getAllUsers()
   }
 
+  private checkUserAuthentication(): void {
+    const loggedInUser = sessionStorage.getItem('loggedInUser');
+    if (!loggedInUser) {
+      this._router.navigate(['/login']);
+    }
+  }
+
   public getAllUsers() : void {
-    this.allUsers=this.allUsers
     this._sharedService.getUsers().subscribe({
         next: (data: Admins[]) => {
             this.allUsers = data;
-            console.log(this.allUsers)
         },
         error: (err) => {
           console.error('Failed to fetch users', err);

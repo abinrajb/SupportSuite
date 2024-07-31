@@ -52,9 +52,11 @@ export class InProgressComponent implements OnInit {
   public isAdmin(): boolean {
     return this.loggedInUser?.roles.some((role: any) => role.roleId === 1)
   }
+
+  
   private checkUserAuthentication(): void {
-    const isLoggedIn = !!this._sharedService.getLoggedInUser();
-    if (!isLoggedIn) {
+    const loggedInUser = sessionStorage.getItem('loggedInUser');
+    if (!loggedInUser) {
       this._router.navigate(['/login']);
     }
   }

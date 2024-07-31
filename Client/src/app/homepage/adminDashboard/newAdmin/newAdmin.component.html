@@ -1,5 +1,6 @@
+<h3 class="d-flex justify-content-start mb-5">Assign Admin privileges to User</h3>
 <label for="exampleDataList" class="form-label">Make Admin<span class="text-danger">*</span></label>
-<input class="form-control" [(ngModel)]="makeAdminPayload.personId" list="datalistOptions" id="exampleDataList" placeholder="Type to search...">
+<input class="form-control border-2" [(ngModel)]="makeAdminPayload.personId" list="datalistOptions" id="exampleDataList" placeholder="Type to search...">
 <datalist id="datalistOptions">
   <option value="" disabled selected>Select user</option>
   <option *ngFor="let user of allUsers" [value]="user.personId">{{ user.name }}</option>

@@ -36,11 +36,11 @@ export class DashBoardComponent implements OnInit {
   }
 
   private checkUserAuthentication(): void {
-    const isLoggedIn = !!this._sharedService.getLoggedInUser();
-    if (!isLoggedIn) {
+    const loggedInUser = sessionStorage.getItem('loggedInUser');
+    if (!loggedInUser) {
       this._router.navigate(['/login']);
-      }
     }
+  }
 
     public pageNumberFun(page:number) {
         this.pageNumber=page;
@@ -52,7 +52,6 @@ export class DashBoardComponent implements OnInit {
          next: (response: any) => {
              this.allRequestCount=response;
              const totalRequestCount = response.assignedRequests; 
-             console.log(response);
              this.totalPages = Math.ceil(totalRequestCount / 10);
              this.getAllAssignedToMe();
          },
@@ -90,10 +89,8 @@ export class DashBoardComponent implements OnInit {
 
     public isApproveReject(status:number): void{
         this.TicketApproveOrRejectDTO.statusCode=status;
-        console.log(this.TicketApproveOrRejectDTO)
         this._sharedService.statusChangeToApprovedOrRejected(this.TicketApproveOrRejectDTO).subscribe({
             next: (response: any) => {
-                console.log(this.TicketApproveOrRejectDTO);
                 this.getAllAssignedToMe();
                 this.setComment();
                 this.countEvent.emit('check count');
