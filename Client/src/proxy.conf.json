@@ -41,11 +41,11 @@
     "changeOrigin": true,
     "pathRewrite": {"^/makeServiceRequest" : ""}
   },
-  "/getAllIn-progressTickets": {
+  "/getTicketsBasedOnStatus": {
     "target": "http://10.199.100.141:8080/api/getServiceTickets",
     "secure": false,
     "changeOrigin": true,
-    "pathRewrite": {"^/getAllIn-progressTickets" : ""}
+    "pathRewrite": {"^/getTicketsBasedOnStatus" : ""}
   },
   "/deleteTicket": {
     "target": "http://10.199.100.141:8080/api/deleteServiceTicket",

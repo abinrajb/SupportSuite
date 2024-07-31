@@ -44,4 +44,24 @@ export interface TicketFetchPayLoad{
     pageNumber:number,
     pageSize:number
 }
-
+  
+ export  interface Role {
+    roleId: number;
+    roleName: string;
+    roleDescription: string;
+  }
+  
+ export interface User {
+    personId: number;
+    firstName: string;
+    lastName: string;
+    userName: string;
+    email: string;
+    country: Country;
+    phoneNumber: string;
+    address: string;
+    createdDate: string;
+    updatedDate: string;
+    roles: Role[];
+  }
+  

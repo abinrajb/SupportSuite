@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { InproInterface } from './homepage/inProgress/inpro-interface';
-import { Category, Admins, Country } from './interface';
+import { Category, Admins, Country, User } from './interface';
 
 
 @Injectable({
@@ -16,8 +16,8 @@ export class SharedService {
 
     constructor(private _http: HttpClient) { }
 
-    login(loginPayload: any): Observable<any> {
-        return this._http.post<any>(`/log`, loginPayload);
+    login(loginPayload: any): Observable<User> {
+        return this._http.post<User>(`/log`, loginPayload);
     }
 
     signup(signupPayload: any): Observable<any> {
@@ -75,7 +75,7 @@ export class SharedService {
     }
 
     getAllServiceTicket(ticketFetchPayLoad:any): Observable<InproInterface> {
-        return this._http.post<InproInterface>(`/getAllIn-progressTickets`,ticketFetchPayLoad);
+        return this._http.post<InproInterface>(`/getTicketsBasedOnStatus`,ticketFetchPayLoad);
     }
 
     assignTicket(assignPayLoad: any): Observable<any> {
@@ -100,16 +100,16 @@ export class SharedService {
         return this._http.post<InproInterface>(`/getAllAssignedToMeTickets`,approvedticketFetchPayLoad);
     }
 
-    statusChangeToApprovedOrRejected(ApprovedOrRejectedPayLoad:any) : Observable<InproInterface>{
-        return this._http.post<InproInterface>(`/statusChangeToApprovedOrRejected`,ApprovedOrRejectedPayLoad);
+    statusChangeToApprovedOrRejected(ApprovedOrRejectedPayLoad:any) : Observable<any>{
+        return this._http.post<any>(`/statusChangeToApprovedOrRejected`,ApprovedOrRejectedPayLoad);
     }
 
-    makeNewAdmin(newAdminPayLoad:any): Observable<InproInterface>{
-        return this._http.post<InproInterface>(`/makeAdmin`,newAdminPayLoad);
+    makeNewAdmin(newAdminPayLoad:any): Observable<any>{
+        return this._http.post<any>(`/makeAdmin`,newAdminPayLoad);
     }
 
-    createNewServiceCategory(newServicePayLoad:any): Observable<InproInterface>{
-        return this._http.post<InproInterface>(`/createNewServiceCategory`,newServicePayLoad);
+    createNewServiceCategory(newServicePayLoad:any): Observable<any>{
+        return this._http.post<any>(`/createNewServiceCategory`,newServicePayLoad);
     }
 
 }

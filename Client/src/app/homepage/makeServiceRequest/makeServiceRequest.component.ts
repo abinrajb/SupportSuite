@@ -87,6 +87,9 @@ export class MakeServiceRequestComponent implements OnInit {
         showConfirmButton: false,
         timer: 1500
       });
+
+      this.makeReqObj.requestDescription="";
+      this.selectService=null;
   }
 
   public scrollToElement(elementId: string) {

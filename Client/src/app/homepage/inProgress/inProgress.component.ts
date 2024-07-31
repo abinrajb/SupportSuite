@@ -128,104 +128,104 @@ export class InProgressComponent implements OnInit {
         }
     });
     }
-    
-      private getCategories(): void {
-        this._sharedService.getCategories().subscribe({
-          next: (data: Category[]) => {
-            this.categories = data;
-          },
-          error: (err) => {
-            console.error('Failed to fetch categories', err);
-          }
-        });
-      }
-    
-      private getAdmin(): void {
-        this._sharedService.getAdmin().subscribe({
-          next: (data: Admins[]) => {
-            this.administrator = data;
-          },
-          error: (err) => {
-            console.error('Failed to fetch admins', err);
-          }
-        });
-      }
-    
-      public currentTicket(ticket: any): void {
-        this.assignTicketObj.ticketId = ticket.ticketId;
-        this.editReqObjPayload = {
-          requestDescription: ticket.requestDescription,
-          ticketId: ticket.ticketId,
-          personId: this.loggedInUser.personId,
-          category: ticket.category.categoryCode
-        };
-      }
-    
-      public saveChanges(): void {
+
+    private getCategories(): void {
+    this._sharedService.getCategories().subscribe({
+        next: (data: Category[]) => {
+        this.categories = data;
+        },
+        error: (err) => {
+        console.error('Failed to fetch categories', err);
+        }
+    });
+    }
+
+    private getAdmin(): void {
+    this._sharedService.getAdmin().subscribe({
+        next: (data: Admins[]) => {
+        this.administrator = data;
+        },
+        error: (err) => {
+        console.error('Failed to fetch admins', err);
+        }
+    });
+    }
+
+    public currentTicket(ticket: any): void {
+    this.assignTicketObj.ticketId = ticket.ticketId;
+    this.editReqObjPayload = {
+        requestDescription: ticket.requestDescription,
+        ticketId: ticket.ticketId,
+        personId: this.loggedInUser.personId,
+        category: ticket.category.categoryCode
+    };
+    }
+
+    public saveChanges(): void {
         if (!this.editReqObjPayload.requestDescription) {
-          this.displayErrorMessage('descriptionErrorMessage', 'Please provide a description to continue.');
-          return;
+            this.displayErrorMessage('descriptionErrorMessage', 'Please provide a description to continue.');
+            return;
         }
         if (!this.editReqObjPayload.requestDescription.trim()) {
             Swal.fire({
-              icon: 'warning',
-              title: 'Empty Field',
-              text: 'Please do not leave the description field empty.',
-              confirmButtonText: 'OK'
+                icon: 'warning',
+                title: 'Empty Field',
+                text: 'Please do not leave the description field empty.',
+                confirmButtonText: 'OK'
             });
             return; 
-          }
-    
+        }
+
         this._sharedService.makeServiceRequest(this.editReqObjPayload).subscribe({
-          next: (response: any) => {
-            this.loadInProgressTickets();
-            Swal.fire({
-                position: "center",
-                icon: "success",
-                title: "Successfully Edited",
-                showConfirmButton: false,
-                timer: 2000
-              });
-            return; 
-          },
-          error: (err) => {
-            console.error('Failed to update ticket', err);
-          }
+        next: (response: any) => {
+        this.loadInProgressTickets();
+        Swal.fire({
+            position: "center",
+            icon: "success",
+            title: "Successfully Edited",
+            showConfirmButton: false,
+            timer: 2000
+            });
+        return; 
+        },
+        error: (err) => {
+           console.error('Failed to update ticket', err);
+        }
         });
-      }
+    }
 
 
-      public setDeleteTicket(ticketId: number){
-          this.deleteTicketVariable=ticketId;
-      }
-    
-      public deleteTicket(): void {
-        this._sharedService.deleteInProgress(this.deleteTicketVariable).subscribe({
-          next: (response: any) => {
-            this.loadInProgressTickets();
-          },
-          error: (err) => {
-            console.error('Failed to delete ticket', err);
-          }
-        });
-      }
-    
-      public assignTicket(): void {
-        this._sharedService.assignTicket(this.assignTicketObj).subscribe({
-          next: (response: any) => {
-            this.loadInProgressTickets();
-            Swal.fire({
-                position: "center",
-                icon: "success",
-                title: "Request is assigned to Administrator",
-                showConfirmButton: false,
-                timer: 2000
-              });
-              this.assignTicketObj.assignedTo=0;
+    public setDeleteTicket(ticketId: number){
+        this.deleteTicketVariable=ticketId;
+    }
 
-          }
-        });
-      }
+    public deleteTicket(): void {
+    this._sharedService.deleteInProgress(this.deleteTicketVariable).subscribe({
+        next: (response: any) => {
+        this.loadInProgressTickets();
+        },
+        error: (err) => {
+        console.error('Failed to delete ticket', err);
+        }
+    });
+    }
+
+    public assignTicket(): void {
+    this._sharedService.assignTicket(this.assignTicketObj).subscribe({
+        next: (response: any) => {
+        this.loadInProgressTickets();
+        Swal.fire({
+            position: "center",
+            icon: "success",
+            title: "Request is assigned to Administrator",
+            showConfirmButton: false,
+            timer: 2000
+            });
+            this.assignTicketObj.assignedTo=0;
+
+        }
+    });
+    }
 
     public getPagesArray(): number[] {
         return Array.from({ length: this.totalPages }, (_, i) => i);
