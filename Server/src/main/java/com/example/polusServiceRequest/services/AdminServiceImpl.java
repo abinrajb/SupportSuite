@@ -8,6 +8,8 @@ import java.util.List;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.example.polusServiceRequest.DTOs.CommentDetailsDTO;
@@ -177,9 +179,12 @@ public class AdminServiceImpl implements AdminService {
 			if (adminPrivilegeCheck == null) {
 				throw new RuntimeException("Unauthorized access: The person making the request is not an admin.");
 			}
-			List<SRTicketsEntity> tickets = ticketsRepository.findAllAssignedToMeTickets(
-					serviceTicketsDetailsDTO.getPersonID(), serviceTicketsDetailsDTO.getStatusType(),
-					serviceTicketsDetailsDTO.getPageSize(), offset);
+
+			Pageable pageable = PageRequest.of(serviceTicketsDetailsDTO.getPageNumber().intValue(),
+					serviceTicketsDetailsDTO.getPageSize().intValue());
+			List<SRTicketsEntity> tickets = ticketsRepository.findServiceTicketsByPersonId(
+					serviceTicketsDetailsDTO.getPersonID(), serviceTicketsDetailsDTO.getStatusType(), pageable);
+
 			List<TicketResponseDTO> ticketDTOs = new ArrayList<>();
 			for (SRTicketsEntity ticket : tickets) {
 				TicketResponseDTO dto = new TicketResponseDTO();

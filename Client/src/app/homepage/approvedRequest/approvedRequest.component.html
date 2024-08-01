@@ -36,7 +36,9 @@
               </td>
               <td id="created-time-{{ i }}">{{ getTime(ticket.updateTimestamp) }}</td>
               <td id="comments-{{ i }}" title="{{ ticket?.comment?.comment }}">
-                  {{ ticket?.comment?.comment }}
+                <div *ngFor="let ticket of ticket?.comment">
+                    {{ ticket.comment }}
+                  </div>
               </td>
             </tr>
           </tbody>

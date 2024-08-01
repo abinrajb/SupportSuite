@@ -10,6 +10,8 @@ import java.util.Map;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -88,10 +90,11 @@ public class SRTicketServiceImpl implements SRTicketService {
 			if (!personRepository.existsById(serviceTicketsDetailsDTO.getPersonID())) {
 				throw new RuntimeException("Person with ID " + serviceTicketsDetailsDTO.getPersonID() + " not found");
 			}
+			Pageable pageable = PageRequest.of(serviceTicketsDetailsDTO.getPageNumber().intValue(),serviceTicketsDetailsDTO.getPageSize().intValue());
 			Long offset = serviceTicketsDetailsDTO.getPageNumber() * serviceTicketsDetailsDTO.getPageSize();
 			List<SRTicketsEntity> tickets = ticketsRepository.findServiceTicketsByPersonId(
 					serviceTicketsDetailsDTO.getPersonID(), serviceTicketsDetailsDTO.getStatusType(),
-					serviceTicketsDetailsDTO.getPageSize(), offset);
+					pageable);
 			List<TicketResponseDTO> ticketDTOs = new ArrayList<>();
 			for (SRTicketsEntity ticket : tickets) {
 				TicketResponseDTO dto = new TicketResponseDTO();

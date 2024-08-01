@@ -8,17 +8,24 @@
                 <div class="card-body">
                     <form class="row g-3" aria-label="Service Request Form">
                         <div class="col-12">
-                            <label for="selectService" class="form-label" aria-label="Select Service">Select Service</label>
-                            <select class="form-control border-2" id="selectService" name="selectService" [(ngModel)]="selectService" required aria-label="Select a service" aria-required="true">
-                                <option value="" disabled>Select a service</option>
-                                <option *ngFor="let category of categories" [ngValue]="category">{{ category.categoryName }}</option>
-                            </select>
+                                <label for="selectService" class="form-label" aria-label="Select Service">Select Service</label>
+                                <select class="form-control border-2" id="selectService" name="selectService" [(ngModel)]="selectService" required aria-label="Select a service" aria-required="true">
+                                  <option value="" [ngValue]="null" disabled selected>Select a category</option>
+                                  <option *ngFor="let category of categories" [ngValue]="category">{{ category.categoryName }}</option>
+                                </select>
                         </div>
-                        <div class="col-12">
+                        <div class="col-12 position-relative">
                             <label for="serviceDescription" class="form-label border-2" aria-label="Service Description">Service Description</label>
                             <textarea class="form-control" name="serviceDescription" [(ngModel)]="makeReqObj.requestDescription"
-                                      id="serviceDescription" required aria-required="true" aria-label="Describe your service request"></textarea>
-                        </div>
+                                      id="serviceDescription" required aria-required="true" placeholder="Description should be below 200 characters"
+                                      aria-label="Describe your service request"></textarea>
+                            <div *ngIf="errorMap.has('descriptionErrorMessage')" class="text-danger">
+                              {{errorMap.get('descriptionErrorMessage')}}
+                            </div>
+                            <div *ngIf="errorMap.has('serviceErrorMessage')" class="text-danger">
+                              {{errorMap.get('serviceErrorMessage')}}
+                            </div>
+                        </div>    
                         <div class="col-md-12 text-end">
                             <button class="btn btn-danger me-2 col-2" type="button" (click)="clearForm()" aria-label="Clear Form" title="Clear the form">
                                 <i class="bi bi-trash"></i> 

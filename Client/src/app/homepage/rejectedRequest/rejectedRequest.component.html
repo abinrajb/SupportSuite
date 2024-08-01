@@ -33,7 +33,11 @@
                           <span class="badge bg-danger">{{ ticket?.statusDescription?.status }}</span>
                       </td>
                       <td>{{ getTime(ticket.updateTimestamp) }}</td>
-                      <td class="description" title="{{ ticket?.comment?.comment }}">{{ ticket?.comment?.comment }}</td>
+                      <td class="description" title="{{ ticket?.comment?.comment }}">                
+                        <div *ngFor="let ticket of ticket?.comment">
+                            {{ ticket.comment }}
+                        </div>
+                    </td>
                   </tr>
               </tbody>
           </table>

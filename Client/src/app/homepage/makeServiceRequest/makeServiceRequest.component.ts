@@ -60,44 +60,50 @@ export class MakeServiceRequestComponent implements OnInit {
     this.makeReqObj.category = this.selectService.categoryCode;
   }
 
-  public addInProgress(): void {
+
+  clearErrorMessage(key: string) {
+    this.errorMap.delete(key);
+  }
+
+  addInProgress(): void {
     this.requestInitialize();
     this.errorMap.clear();
 
-    if (!this.makeReqObj.requestDescription) {
-      this.displayErrorMessage('descriptionErrorMessage', 'Please select a service to continue.');
+    if (!this.makeReqObj.category) {
+      this.displayErrorMessage('serviceErrorMessage', 'Please select a service to continue.');
       return;
     }
-
+    if (this.makeReqObj.requestDescription.length > 200) {
+      this.displayErrorMessage('descriptionErrorMessage', 'Description should be below 200 characters.');
+      return;
+    }
+    this.isResponseSent=true;
     if (this.isResponseSent) {
       this._sharedService.makeServiceRequest(this.makeReqObj).subscribe({
         next: (response: any) => {
           this.showInProgressComponent = true;
+          Swal.fire({
+            position: "center",
+            icon: "success",
+            title: "new ticket created",
+            showConfirmButton: false,
+            timer: 1500
+            });
           this.scrollToElement('inProgressComponent');
         },
         error: (err) => {
           console.error('Failed to make service request', err);
         }
       });
-    }
-    Swal.fire({
-        position: "center",
-        icon: "success",
-        title: "New Service Ticket Added",
-        showConfirmButton: false,
-        timer: 1500
-      });
 
-      this.makeReqObj.requestDescription="";
-      this.selectService=null;
-  }
-
-  public scrollToElement(elementId: string) {
-    const element = document.getElementById(elementId);
-    if (element) {
-      element.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }
     }
-  }
+    public scrollToElement(elementId: string) {
+       const element = document.getElementById(elementId);
+       if (element) {
+       element.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+    }
 
   public clearForm(): void {
     this.makeReqObj = {
