@@ -71,5 +71,9 @@ public class PersonEntity {
 
 	@OneToMany(mappedBy = "person", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
 	private List<PersonRoleEntity> roles;
+
+	
+	
+	
 	
 }

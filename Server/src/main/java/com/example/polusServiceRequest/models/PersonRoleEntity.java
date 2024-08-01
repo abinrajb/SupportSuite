@@ -37,4 +37,7 @@ public class PersonRoleEntity {
 	@Column(name = "UPDATE_TIMESTAMP")
 	private Timestamp updateTimestamp;
 
+	
+	
+
 }

@@ -15,33 +15,24 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import com.example.polusServiceRequest.DTOs.CommentDetailsDTO;
-import com.example.polusServiceRequest.DTOs.MakeOrRemoveAdminDTO;
-import com.example.polusServiceRequest.DTOs.NewServiceCategoryDTO;
 import com.example.polusServiceRequest.DTOs.PersonDTO;
 import com.example.polusServiceRequest.DTOs.RequestCountsDTO;
 import com.example.polusServiceRequest.DTOs.RoleDTO;
 import com.example.polusServiceRequest.DTOs.SRTicketCategoryDTO;
 import com.example.polusServiceRequest.DTOs.ServiceTicketDTO;
 import com.example.polusServiceRequest.DTOs.ServiceTicketsDetailsDTO;
-import com.example.polusServiceRequest.DTOs.SignInResponseDTO;
-import com.example.polusServiceRequest.DTOs.SignUpDTO;
 import com.example.polusServiceRequest.DTOs.StatusDTO;
-import com.example.polusServiceRequest.DTOs.TicketApproveOrRejectDTO;
 import com.example.polusServiceRequest.DTOs.TicketResponseDTO;
 import com.example.polusServiceRequest.constants.RoleNamesConstants;
 import com.example.polusServiceRequest.constants.SRTicketStatusConstants;
-import com.example.polusServiceRequest.models.CountryEntity;
 import com.example.polusServiceRequest.models.PersonEntity;
 import com.example.polusServiceRequest.models.PersonRoleEntity;
 import com.example.polusServiceRequest.models.RoleEntity;
 import com.example.polusServiceRequest.models.SRTicketCategoryEntity;
 import com.example.polusServiceRequest.models.SRTicketCommentsEntity;
-import com.example.polusServiceRequest.models.SRTicketHistoryEntity;
 import com.example.polusServiceRequest.models.SRTicketStatusEntity;
 import com.example.polusServiceRequest.models.SRTicketsEntity;
-import com.example.polusServiceRequest.repositories.CountryRepository;
 import com.example.polusServiceRequest.repositories.PersonRepository;
-import com.example.polusServiceRequest.repositories.PersonRoleRepository;
 import com.example.polusServiceRequest.repositories.RoleRepository;
 import com.example.polusServiceRequest.repositories.SRTicketCategoryRepository;
 import com.example.polusServiceRequest.repositories.SRTicketCommentsRepository;
@@ -75,17 +66,12 @@ public class SRTicketServiceImpl implements SRTicketService {
 	@Autowired
 	private RoleRepository roleRepository;
 
-	@Autowired
-	private PersonRoleRepository personRoleRepository;
-
-	@Autowired
-	private CountryRepository countryRepository;
-
 	@Override
 	public Boolean deleteServiceTicket(Long ticketId) {
 		try {
 			SRTicketsEntity ticket = ticketsRepository.findById(ticketId)
 					.orElseThrow(() -> new RuntimeException("Ticket not found"));
+			
 			historyRepository.deleteBySrTicket(ticket);
 			ticketsRepository.delete(ticket);
 			return true;
@@ -95,39 +81,43 @@ public class SRTicketServiceImpl implements SRTicketService {
 		}
 	}
 
-	
 	@Override
 	public List<TicketResponseDTO> getServiceTickets(ServiceTicketsDetailsDTO serviceTicketsDetailsDTO) {
-
 		try {
+			// Validate if the person exists
+			if (!personRepository.existsById(serviceTicketsDetailsDTO.getPersonID())) {
+				throw new RuntimeException("Person with ID " + serviceTicketsDetailsDTO.getPersonID() + " not found");
+			}
 			Long offset = serviceTicketsDetailsDTO.getPageNumber() * serviceTicketsDetailsDTO.getPageSize();
 			List<SRTicketsEntity> tickets = ticketsRepository.findServiceTicketsByPersonId(
 					serviceTicketsDetailsDTO.getPersonID(), serviceTicketsDetailsDTO.getStatusType(),
 					serviceTicketsDetailsDTO.getPageSize(), offset);
 			List<TicketResponseDTO> ticketDTOs = new ArrayList<>();
-
 			for (SRTicketsEntity ticket : tickets) {
 				TicketResponseDTO dto = new TicketResponseDTO();
 				dto.setTicketId(ticket.getSrTicketId());
 				dto.setCategory(getCategoryDetails(ticket.getCategory()));
 				dto.setRequestDescription(ticket.getDescription());
-				dto.setStatusDescription(getStatusDetails(ticket.getStatus()));//
+				dto.setStatusDescription(getStatusDetails(ticket.getStatus()));
 				dto.setCreateTimestamp(ticket.getCreateTimestamp());
 				dto.setUpdateTimestamp(ticket.getUpdateTimestamp());
 				Long statusType = serviceTicketsDetailsDTO.getStatusType();
-				if (!statusType.equals(SRTicketStatusConstants.IN_PROGRESS))
+				if (!statusType.equals(SRTicketStatusConstants.IN_PROGRESS)) {
 					dto.setAssignedTo(getAdminDetails(ticket.getAssignedTo()));
-				if (statusType.equals(SRTicketStatusConstants.APPROVED)
-						|| statusType.equals(SRTicketStatusConstants.REJECTED)) {
-					SRTicketCommentsEntity comment = commentRepository.findByTicketId(ticket.getSrTicketId());
-					if (comment != null) {
+				}
+				List<SRTicketCommentsEntity> comments = commentRepository.findAllByTicketId(ticket.getSrTicketId());
+				if (comments != null && !comments.isEmpty()) {
+					List<CommentDetailsDTO> commentDetailsDTOs = new ArrayList<>();
+					for (SRTicketCommentsEntity comment : comments) {
 						CommentDetailsDTO commentDetailsDTO = new CommentDetailsDTO();
 						commentDetailsDTO.setCommentId(comment.getCommentId());
+						commentDetailsDTO.setStatus(ServiceRequestUtil.getStatusDetails(comment.getStatusCode()));
 						commentDetailsDTO.setComment(comment.getComment());
 						commentDetailsDTO.setCommentUser(getAdminDetails(comment.getCommentUser()));
 						commentDetailsDTO.setCommentTimestamp(comment.getCommentTimestamp());
-						dto.setComment(commentDetailsDTO);
+						commentDetailsDTOs.add(commentDetailsDTO);
 					}
+					dto.setComment(commentDetailsDTOs);
 				}
 				ticketDTOs.add(dto);
 			}
@@ -144,7 +134,6 @@ public class SRTicketServiceImpl implements SRTicketService {
 		try {
 			boolean actionCompleted;
 			Map<String, String> response = new HashMap<>();
-
 			if (ticketDTO.getTicketId() == null) {
 				actionCompleted = createNewServiceTicket(ticketDTO);
 				if (actionCompleted)
@@ -162,7 +151,6 @@ public class SRTicketServiceImpl implements SRTicketService {
 		} catch (Exception e) {
 			logger.info(e.getMessage());
 			throw new RuntimeException(e.getMessage());
-
 		}
 	}
 
@@ -172,95 +160,19 @@ public class SRTicketServiceImpl implements SRTicketService {
 		try {
 			SRTicketsEntity ticket = ticketsRepository.findById(ticketDTO.getTicketId())
 					.orElseThrow(() -> new RuntimeException("Ticket not found"));
-
+			// Validate that the ticket status is "in-progress"
+			if (!SRTicketStatusConstants.IN_PROGRESS.equals(ticket.getStatus().getStatusCode())) {
+				throw new RuntimeException("Ticket is not in-progress and cannot be assigned");
+			}
 			PersonEntity admin = personRepository.findById(ticketDTO.getAssignedTo())
 					.orElseThrow(() -> new RuntimeException("Admin not found"));
-
 			SRTicketStatusEntity status = statusRepository.findById(SRTicketStatusConstants.ASSIGNED)
 					.orElseThrow(() -> new RuntimeException("Status not found"));
-
 			ticket.setAssignedTo(admin);
 			ticket.setUpdateTimestamp(Timestamp.from(Instant.now()));
 			ticket.setStatus(status);
 			ticket = ticketsRepository.save(ticket);
-			SRTicketHistoryEntity history = new SRTicketHistoryEntity();
-			history.setSrTicket(ticket);
-			history.setStatusCode(ticket.getStatus());
-			history.setUpdateUser(ticket.getPerson());
-			history.setUpdateTimestamp(Timestamp.from(Instant.now()));
-			historyRepository.save(history);
-			return true;
-		} catch (Exception e) {
-			logger.info(e.getMessage());
-			throw new RuntimeException(e.getMessage());
-		}
-	}
-
-	@Override
-	public Boolean approveOrRejectTicket(TicketApproveOrRejectDTO ticketDTO) {
-
-		try {
-			SRTicketsEntity ticket = ticketsRepository.findById(ticketDTO.getTicketId())
-					.orElseThrow(() -> new RuntimeException("Ticket not found"));
-			SRTicketStatusEntity status = statusRepository.findById(ticketDTO.getStatusCode())
-					.orElseThrow(() -> new RuntimeException("Status not found"));
-			ticket.setStatus(status);
-			ticket.setUpdateTimestamp(Timestamp.from(Instant.now()));
-			ticket = ticketsRepository.save(ticket);
-			SRTicketHistoryEntity history = new SRTicketHistoryEntity();
-			history.setSrTicket(ticket);
-			history.setStatusCode(ticket.getStatus());
-			history.setUpdateUser(ticket.getAssignedTo());
-			history.setUpdateTimestamp(Timestamp.from(Instant.now()));
-			historyRepository.save(history);
-			if (ticketDTO.getComment() != null && !ticketDTO.getComment().isEmpty()) {
-				SRTicketCommentsEntity comment = new SRTicketCommentsEntity();
-				comment.setSrTicket(ticket);
-				comment.setComment(ticketDTO.getComment());
-				comment.setCommentUser(ticket.getAssignedTo());
-				comment.setCommentTimestamp(Timestamp.from(Instant.now()));
-				commentRepository.save(comment);
-			}
-			return true;
-		} catch (Exception e) {
-			logger.info(e.getMessage());
-			throw new RuntimeException(e.getMessage());
-		}
-	}
-
-	@Override
-	public Boolean editApprovedOrRejectedTickets(TicketApproveOrRejectDTO ticketDTO) {
-		try {
-			SRTicketsEntity ticket = ticketsRepository.findById(ticketDTO.getTicketId())
-					.orElseThrow(() -> new RuntimeException("Ticket not found"));
-			// Validation set here
-			SRTicketStatusEntity status = statusRepository.findById(ticketDTO.getStatusCode())
-					.orElseThrow(() -> new RuntimeException("Status not found"));
-			ticket.setStatus(status);
-			ticket.setUpdateTimestamp(Timestamp.from(Instant.now()));
-			ticket = ticketsRepository.save(ticket);
-
-			SRTicketHistoryEntity history = new SRTicketHistoryEntity();
-			history.setSrTicket(ticket);
-			history.setStatusCode(ticket.getStatus());
-			history.setUpdateUser(ticket.getAssignedTo());
-			history.setUpdateTimestamp(Timestamp.from(Instant.now()));
-			historyRepository.save(history);
-
-			// Fetch the existing comment
-			SRTicketCommentsEntity comment = commentRepository.findByTicketId(ticket.getSrTicketId());
-
-			// If comment doesn't exist, create a new one
-			if (comment == null) {
-				comment = new SRTicketCommentsEntity();
-			}
-
-			comment.setSrTicket(ticket);
-			comment.setComment(ticketDTO.getComment());
-			comment.setCommentUser(ticket.getAssignedTo());
-			comment.setCommentTimestamp(Timestamp.from(Instant.now()));
-			commentRepository.save(comment);
-
+			ServiceRequestUtil.setHistoryDetails(ticket, historyRepository);
 			return true;
 		} catch (Exception e) {
 			logger.info(e.getMessage());
@@ -272,60 +184,21 @@ public class SRTicketServiceImpl implements SRTicketService {
 	public RequestCountsDTO getRequestCounts(Long personId) {
 
 		try {
-			Long totalRequestCounts = ticketsRepository.countAllRequestsByPersonId(personId);
-			Long inProgressRequestsCounts = ticketsRepository.requestsCount(personId,
-					SRTicketStatusConstants.IN_PROGRESS);
-			Long assignedRequestsCounts = ticketsRepository.requestsCount(personId, SRTicketStatusConstants.ASSIGNED);
-			Long approvedRequestsCounts = ticketsRepository.requestsCount(personId, SRTicketStatusConstants.APPROVED);
-			Long rejectedRequestsCounts = ticketsRepository.requestsCount(personId, SRTicketStatusConstants.REJECTED);
+			// Check if person exists
+			if (!personRepository.existsById(personId)) {
+				throw new RuntimeException("Person with ID " + personId + " not found");
+			}
 			RequestCountsDTO countDTO = new RequestCountsDTO();
-			countDTO.setTotalRequests(totalRequestCounts);
-			countDTO.setInProgressRequests(inProgressRequestsCounts);
-			countDTO.setAssignedRequests(assignedRequestsCounts);
-			countDTO.setApprovedRequests(approvedRequestsCounts);
-			countDTO.setRejectedRequests(rejectedRequestsCounts);
+			countDTO.setTotalRequests(ticketsRepository.countAllRequestsByPersonId(personId));
+			countDTO.setInProgressRequests(
+					ticketsRepository.requestsCount(personId, SRTicketStatusConstants.IN_PROGRESS));
+			countDTO.setAssignedRequests(ticketsRepository.requestsCount(personId, SRTicketStatusConstants.ASSIGNED));
+			countDTO.setApprovedRequests(ticketsRepository.requestsCount(personId, SRTicketStatusConstants.APPROVED));
+			countDTO.setRejectedRequests(ticketsRepository.requestsCount(personId, SRTicketStatusConstants.REJECTED));
+			countDTO.setAssignedToMeRequests(ticketsRepository.countAssignedToMeTickets(personId, SRTicketStatusConstants.ASSIGNED));
+			countDTO.setAdminApproveRequests(ticketsRepository.countAssignedToMeTickets(personId, SRTicketStatusConstants.APPROVED));
+			countDTO.setAdminRejectRequests(ticketsRepository.countAssignedToMeTickets(personId, SRTicketStatusConstants.REJECTED));
 			return countDTO;
-		} catch (Exception e) {
-			logger.info(e.getMessage());
-			throw new RuntimeException(e.getMessage());
-		}
-	}
-
-	@Override
-	public Boolean CreateNewServiceCategory(NewServiceCategoryDTO categoryDTO) {
-		try {
-			PersonEntity admin = personRepository.findById(categoryDTO.getAdminId())
-					.orElseThrow(() -> new RuntimeException("Admin not found"));
-			SRTicketCategoryEntity category = new SRTicketCategoryEntity();
-			category.setCategoryName(categoryDTO.getCategoryName());
-			category.setDescription(categoryDTO.getDescription());
-			category.setUpdateUser(admin);
-			category.setUpdateTimestamp(Timestamp.from(Instant.now()));
-			category.setIsActive("yes");
-			categoryRepository.save(category);
-			return true;
-		} catch (Exception e) {
-			logger.info(e.getMessage());
-			throw new RuntimeException(e.getMessage());
-		}
-	}
-
-	@Override
-	public Boolean MakeAdmin(MakeOrRemoveAdminDTO makeAdminDTO) {
-		try {
-			PersonEntity person = personRepository.findById(makeAdminDTO.getPersonId())
-					.orElseThrow(() -> new RuntimeException("User not found"));
-			RoleEntity role = roleRepository.findById(makeAdminDTO.getRole())
-					.orElseThrow(() -> new RuntimeException("Role not found"));
-			PersonEntity admin = personRepository.findById(makeAdminDTO.getAdminID())
-					.orElseThrow(() -> new RuntimeException("Admin not found"));
-			PersonRoleEntity personRoleEntity = new PersonRoleEntity();
-			personRoleEntity.setPerson(person);
-			personRoleEntity.setRole(role);
-			personRoleEntity.setUpdateUser(admin);
-			personRoleEntity.setUpdateTimestamp(Timestamp.from(Instant.now()));
-			personRoleRepository.save(personRoleEntity);
-			return true;
 		} catch (Exception e) {
 			logger.info(e.getMessage());
 			throw new RuntimeException(e.getMessage());
@@ -336,6 +209,10 @@ public class SRTicketServiceImpl implements SRTicketService {
 	public List<TicketResponseDTO> getAllServiceTicketsByPersonID(Long personID) {
 
 		try {
+			// Check if person exists
+			if (!personRepository.existsById(personID)) {
+				throw new RuntimeException("Person with ID " + personID + " not found");
+			}
 			List<SRTicketsEntity> tickets = ticketsRepository.findAllRequestsByPersonId(personID);
 			List<TicketResponseDTO> ticketDTOs = new ArrayList<>();
 			for (SRTicketsEntity ticket : tickets) {
@@ -359,30 +236,6 @@ public class SRTicketServiceImpl implements SRTicketService {
 	}
 
 	@Override
-	public Boolean removeAdmin(MakeOrRemoveAdminDTO makeOrRemoveAdminDTO) {
-		try {
-
-			Long personId = personRoleRepository.findPersonRoleIdByPersonIdAndRoleId(makeOrRemoveAdminDTO.getAdminID(),
-					makeOrRemoveAdminDTO.getRole());
-			if (personId == null) {
-				throw new RuntimeException("Admin not found/ You have no privilege to remove the role!");
-			}
-			personId = personRoleRepository.findPersonRoleIdByPersonIdAndRoleId(makeOrRemoveAdminDTO.getPersonId(),
-					makeOrRemoveAdminDTO.getRole());
-			if (personId == null) {
-				throw new RuntimeException("This user is not already an admin!");
-			}
-			// Remove the admin privilege
-			personRoleRepository.removeAdminPrivilege(makeOrRemoveAdminDTO.getPersonId(),
-					makeOrRemoveAdminDTO.getRole());
-			return true;
-		} catch (Exception e) {
-			logger.info(e.getMessage());
-			throw new RuntimeException(e.getMessage());
-		}
-	}
-
-	@Override
 	public List<StatusDTO> getAllStatuses() {
 		try {
 
@@ -399,85 +252,12 @@ public class SRTicketServiceImpl implements SRTicketService {
 	}
 
 	@Override
-	public SignInResponseDTO editUserDetails(SignUpDTO userDetails) {
-
-		try {
-			PersonEntity person = personRepository.findById(userDetails.getPersonId())
-					.orElseThrow(() -> new RuntimeException("Ticket not found"));
-			person.setFirstName(userDetails.getFirstName());
-			person.setLastName(userDetails.getLastName());
-			person.setFullName(userDetails.getFirstName() + " " + userDetails.getLastName());
-			if (!userDetails.getUserName().equals(person.getUserName())) {
-				// Check if the username already exists
-				if (personRepository.findByUserName(userDetails.getUserName()) != null) {
-					throw new RuntimeException("Username already exists");
-				}
-			}
-			person.setUserName(userDetails.getUserName());
-			person.setEmail(userDetails.getEmail());
-			person.setPhoneNumber(userDetails.getPhoneNo());
-			person.setAddress(userDetails.getAddress());
-			person.setUpdateTimestamp(Timestamp.from(Instant.now()));
-			CountryEntity country = countryRepository.findById(userDetails.getCountry())
-					.orElseThrow(() -> new RuntimeException("Country not found"));
-			person.setCountry(country);
-			person.setDesignation(userDetails.getDesignation());
-			PersonEntity savedPerson = personRepository.save(person);
-			return getUserDetails(savedPerson);
-		} catch (Exception e) {
-			logger.info(e.getMessage());
-			throw new RuntimeException(e.getMessage());
-		}
-	}
-
-	@Override
-	public List<TicketResponseDTO> getAllAssignedToMeTickets(ServiceTicketsDetailsDTO serviceTicketsDetailsDTO) {
-		try {
-			Long offset = serviceTicketsDetailsDTO.getPageNumber() * serviceTicketsDetailsDTO.getPageSize();
-			List<SRTicketsEntity> tickets = ticketsRepository.findAllAssignedToMeTickets(
-					serviceTicketsDetailsDTO.getPersonID(), serviceTicketsDetailsDTO.getStatusType(),
-					serviceTicketsDetailsDTO.getPageSize(), offset);
-			List<TicketResponseDTO> ticketDTOs = new ArrayList<>();
-			for (SRTicketsEntity ticket : tickets) {
-				TicketResponseDTO dto = new TicketResponseDTO();
-				dto.setTicketId(ticket.getSrTicketId());
-				dto.setCategory(getCategoryDetails(ticket.getCategory()));
-				dto.setRequestDescription(ticket.getDescription());
-				dto.setStatusDescription(getStatusDetails(ticket.getStatus()));//
-				dto.setCreateTimestamp(ticket.getCreateTimestamp());
-				dto.setUpdateTimestamp(ticket.getUpdateTimestamp());
-				Long statusType = serviceTicketsDetailsDTO.getStatusType();
-				if (!statusType.equals(SRTicketStatusConstants.IN_PROGRESS))
-					dto.setAssignedTo(getAdminDetails(ticket.getAssignedTo()));
-				if (statusType.equals(SRTicketStatusConstants.APPROVED)
-						|| statusType.equals(SRTicketStatusConstants.REJECTED)) {
-					SRTicketCommentsEntity comment = commentRepository.findByTicketId(ticket.getSrTicketId());
-					if (comment != null) {
-						CommentDetailsDTO commentDetailsDTO = new CommentDetailsDTO();
-						commentDetailsDTO.setCommentId(comment.getCommentId());
-						commentDetailsDTO.setComment(comment.getComment());
-						commentDetailsDTO.setCommentUser(getAdminDetails(comment.getCommentUser()));
-						commentDetailsDTO.setCommentTimestamp(comment.getCommentTimestamp());
-						dto.setComment(commentDetailsDTO);
-					}
-				}
-				ticketDTOs.add(dto);
-			}
-			return ticketDTOs;
-		} catch (Exception e) {
-			logger.info(e.getMessage());
-			throw new RuntimeException(e.getMessage());
-		}
-	}
-
-	@Override
 	public List<PersonDTO> getAllUsersByroleId(Long roleId) {
 
 		List<PersonEntity> users = null;
 		try {
 			if (roleId == RoleNamesConstants.APPLICATION_ADMINISTRATOR) {
 				users = personRepository.findAllApplicationAdministrators();
-
 			} else if (roleId == RoleNamesConstants.PRINCIPAL_INVESTIGATOR) {
 				users = personRepository.findPrincipalInvestigatorsNotAdmins();
 			}
@@ -495,6 +275,7 @@ public class SRTicketServiceImpl implements SRTicketService {
 
 	@Override
 	public List<RoleDTO> getAllRoles() {
+		
 		List<RoleEntity> roles = roleRepository.findAll();
 		List<RoleDTO> roleDTOs = new ArrayList<>();
 		for (RoleEntity role : roles) {
@@ -507,30 +288,26 @@ public class SRTicketServiceImpl implements SRTicketService {
 		return roleDTOs;
 	}
 
-	private SignInResponseDTO getUserDetails(PersonEntity person) {
+	@Override
+	public Boolean editRejectedTicket(ServiceTicketDTO ticketDTO) {
 
-		SignInResponseDTO responseDTO = new SignInResponseDTO();
-		responseDTO.setPersonId(person.getPersonId());
-		responseDTO.setFirstName(person.getFirstName());
-		responseDTO.setLastName(person.getLastName());
-		responseDTO.setUserName(person.getUserName());
-		responseDTO.setEmail(person.getEmail());
-		responseDTO.setCountry(person.getCountry());
-		responseDTO.setPhoneNumber(person.getPhoneNumber());
-		responseDTO.setAddress(person.getAddress());
-		responseDTO.setCreatedDate(person.getCreateTimestamp());
-		responseDTO.setUpdatedDate(person.getUpdateTimestamp());
-
-		List<RoleDTO> roleDTOs = new ArrayList<>();
-		for (PersonRoleEntity personRole : person.getRoles()) {
-			RoleDTO roleDTO = new RoleDTO();
-			roleDTO.setRoleId(personRole.getRole().getRoleId());
-			roleDTO.setRoleName(personRole.getRole().getRoleName());
-			roleDTO.setRoleDescription(personRole.getRole().getRoleDescription());
-			roleDTOs.add(roleDTO);
+		try {
+			SRTicketsEntity ticket = ticketsRepository.findById(ticketDTO.getTicketId())
+					.orElseThrow(() -> new RuntimeException("Ticket not found"));
+			// Validate that the ticket status is "rejected"
+			if (!SRTicketStatusConstants.REJECTED.equals(ticket.getStatus().getStatusCode()))
+				throw new RuntimeException("Ticket is not in rejected state so can't be resubmit.");
+			SRTicketStatusEntity status = statusRepository.findById(SRTicketStatusConstants.IN_PROGRESS)
+					.orElseThrow(() -> new RuntimeException("Status not found"));
+			ticket.setStatus(status);
+			ticket.setUpdateTimestamp(Timestamp.from(Instant.now()));
+			ticketsRepository.save(ticket);
+			updateInProgressTicket(ticketDTO);
+			setTicketStatusAssigned(ticketDTO);
+			return true;
+		} catch (Exception e) {
+			throw new RuntimeException(e.getMessage());
 		}
-		responseDTO.setRoles(roleDTOs);
-		return responseDTO;
 	}
 
 	private PersonDTO getAdminDetails(PersonEntity person) {
@@ -574,23 +351,17 @@ public class SRTicketServiceImpl implements SRTicketService {
 					.orElseThrow(() -> new RuntimeException("User not found"));
 			SRTicketCategoryEntity category = categoryRepository.findById(ticketDTO.getCategory())
 					.orElseThrow(() -> new RuntimeException("Category not found"));
-
+			SRTicketStatusEntity status = statusRepository.findById(SRTicketStatusConstants.IN_PROGRESS)
+					.orElseThrow(() -> new RuntimeException("Status not found"));
 			SRTicketsEntity ticket = new SRTicketsEntity();
 			ticket.setPerson(user);
 			ticket.setCategory(category);
 			ticket.setDescription(ticketDTO.getRequestDescription());
 			ticket.setCreateTimestamp(Timestamp.from(Instant.now()));
 			ticket.setUpdateTimestamp(ticket.getCreateTimestamp()); // Initial update timestamp same as create timestamp
-			SRTicketStatusEntity status = statusRepository.findById(SRTicketStatusConstants.IN_PROGRESS)
-					.orElseThrow(() -> new RuntimeException("Status not found"));
 			ticket.setStatus(status);
 			ticket = ticketsRepository.save(ticket);
-			SRTicketHistoryEntity history = new SRTicketHistoryEntity();
-			history.setSrTicket(ticket);
-			history.setStatusCode(status);
-			history.setUpdateUser(user);
-			history.setUpdateTimestamp(Timestamp.from(Instant.now()));
-			historyRepository.save(history);
+			ServiceRequestUtil.setHistoryDetails(ticket, historyRepository);
 			return true;
 		} catch (Exception e) {
 			throw new RuntimeException(e.getMessage());
@@ -608,12 +379,7 @@ public class SRTicketServiceImpl implements SRTicketService {
 			ticket.setDescription(updateDTO.getRequestDescription());
 			ticket.setUpdateTimestamp(Timestamp.from(Instant.now()));
 			ticket = ticketsRepository.save(ticket);
-			SRTicketHistoryEntity history = new SRTicketHistoryEntity();
-			history.setSrTicket(ticket);
-			history.setStatusCode(ticket.getStatus());
-			history.setUpdateUser(ticket.getPerson());
-			history.setUpdateTimestamp(Timestamp.from(Instant.now()));
-			historyRepository.save(history);
+			ServiceRequestUtil.setHistoryDetails(ticket, historyRepository);
 			return true;
 		} catch (Exception e) {
 			throw new RuntimeException(e.getMessage());

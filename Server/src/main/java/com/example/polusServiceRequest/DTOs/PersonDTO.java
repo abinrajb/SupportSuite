@@ -10,4 +10,5 @@ public class PersonDTO {
 	private Long personId;
 	private String name;
 	private List<RoleDTO> roles;
+
 }

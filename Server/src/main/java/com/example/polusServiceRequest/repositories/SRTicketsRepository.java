@@ -17,19 +17,7 @@ public interface SRTicketsRepository extends JpaRepository<SRTicketsEntity, Long
 	@Query(value = "SELECT COUNT(*) FROM SR_TICKETS WHERE PERSON_ID = :personId", nativeQuery = true)
 	long countAllRequestsByPersonId(@Param("personId") Long personId);
 
-	@Query(value = "SELECT COUNT(*) FROM SR_TICKETS WHERE PERSON_ID = :personId AND STATUS_CODE = 1", nativeQuery = true)
-	long countInProgressRequestsByPersonId(@Param("personId") Long personId);
-
-	@Query(value = "SELECT COUNT(*) FROM SR_TICKETS WHERE PERSON_ID = :personId AND STATUS_CODE = 2", nativeQuery = true)
-	long countAssignedRequestsByPersonId(@Param("personId") Long personId);
-
-	@Query(value = "SELECT COUNT(*) FROM SR_TICKETS WHERE PERSON_ID = :personId AND STATUS_CODE = 3", nativeQuery = true)
-	long countApprovedRequestsByPersonId(@Param("personId") Long personId);
-
-	@Query(value = "SELECT COUNT(*) FROM SR_TICKETS WHERE PERSON_ID = :personId AND STATUS_CODE = 4", nativeQuery = true)
-	long countRejectedRequestsByPersonId(@Param("personId") Long personId);
-
-	@Query(value = "SELECT * FROM SR_TICKETS WHERE PERSON_ID = :personId", nativeQuery = true)
+	@Query(value = "SELECT * FROM SR_TICKETS WHERE PERSON_ID = :personId ORDER BY update_timestamp DESC", nativeQuery = true)
 	List<SRTicketsEntity> findAllRequestsByPersonId(@Param("personId") Long personId);
 
 	@Query(value = "SELECT COUNT(*) FROM SR_TICKETS WHERE PERSON_ID = :personId AND STATUS_CODE = :statusCode", nativeQuery = true)
@@ -37,5 +25,8 @@ public interface SRTicketsRepository extends JpaRepository<SRTicketsEntity, Long
 
 	@Query(value = "SELECT * FROM SR_TICKETS WHERE ASSIGNED_TO = :adminId AND STATUS_CODE = :statusCode ORDER BY UPDATE_TIMESTAMP DESC LIMIT :limit OFFSET :offset", nativeQuery = true)
 	List<SRTicketsEntity> findAllAssignedToMeTickets(@Param("adminId") Long adminId,
-	        @Param("statusCode") Long statusCode, @Param("limit") Long limit, @Param("offset") Long offset);
+			@Param("statusCode") Long statusCode, @Param("limit") Long limit, @Param("offset") Long offset);
+
+	@Query(value = "SELECT COUNT(*) FROM SR_TICKETS WHERE ASSIGNED_TO = :adminId AND STATUS_CODE = :statusCode", nativeQuery = true)
+	Long countAssignedToMeTickets(@Param("adminId") Long adminId, @Param("statusCode") Long statusCode);
 }

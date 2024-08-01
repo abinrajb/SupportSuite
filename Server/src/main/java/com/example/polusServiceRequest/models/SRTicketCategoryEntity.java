@@ -28,14 +28,14 @@ public class SRTicketCategoryEntity {
 	@Column(name = "DESCRIPTION")
 	private String description;
 
-    @ManyToOne
-    @JoinColumn(name = "UPDATE_USER")
-    private PersonEntity updateUser;
+	@ManyToOne
+	@JoinColumn(name = "UPDATE_USER")
+	private PersonEntity updateUser;
 
 	@Column(name = "UPDATE_TIMESTAMP")
 	private Timestamp updateTimestamp;
-	
-	@Column(name="IS_ACTIVE")
+
+	@Column(name = "IS_ACTIVE")
 	private String isActive;
 
 }

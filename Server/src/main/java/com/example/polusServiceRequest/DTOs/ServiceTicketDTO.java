@@ -6,8 +6,9 @@ import lombok.Data;
 public class ServiceTicketDTO {
 
 	private Long personId;
-	private Long TicketId;
+	private Long ticketId;
 	private Long category;
 	private String requestDescription;
 	private Long assignedTo;
+
 }

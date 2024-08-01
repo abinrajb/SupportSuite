@@ -52,9 +52,8 @@ public class SRTicketsEntity {
 	@Column(name = "UPDATE_TIMESTAMP")
 	@Temporal(TemporalType.TIMESTAMP)
 	private Timestamp updateTimestamp;
-	
-	 @OneToMany(mappedBy = "srTicket", cascade = CascadeType.ALL, orphanRemoval = true)
-	    private List<SRTicketHistoryEntity> history;
 
-	
+	@OneToMany(mappedBy = "srTicket", cascade = CascadeType.ALL, orphanRemoval = true)
+	private List<SRTicketHistoryEntity> history;
+
 }

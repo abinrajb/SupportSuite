@@ -17,19 +17,19 @@ import lombok.Data;
 @Table(name = "SR_TICKET_STATUS")
 public class SRTicketStatusEntity {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "STATUS_CODE")
-    private Long statusCode;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "STATUS_CODE")
+	private Long statusCode;
 
-    @Column(name = "STATUS_DESCRIPTION", nullable = false)
-    private String statusDescription;
-    
-    @ManyToOne
-    @JoinColumn(name = "UPDATE_USER")
-    private PersonEntity updateUser;
+	@Column(name = "STATUS_DESCRIPTION", nullable = false)
+	private String statusDescription;
 
-    @Column(name = "UPDATE_TIMESTAMP")
-    private Timestamp updateTimestamp;
+	@ManyToOne
+	@JoinColumn(name = "UPDATE_USER")
+	private PersonEntity updateUser;
+
+	@Column(name = "UPDATE_TIMESTAMP")
+	private Timestamp updateTimestamp;
 
 }

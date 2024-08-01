@@ -8,5 +8,5 @@ public class UpdateServiceTicketDTO {
 	private Long ticketId;
 	private String category;
 	private String requestDescription;
-
+	private Long adminId;
 }

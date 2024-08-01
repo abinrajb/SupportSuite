@@ -32,4 +32,8 @@ public class CountryEntity {
 	@Column(name = "COUNTRY_CODE_ISO2")
 	private String countryCodeIso2;
 
+	
+	
+	
+
 }

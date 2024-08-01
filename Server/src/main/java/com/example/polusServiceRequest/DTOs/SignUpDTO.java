@@ -15,5 +15,5 @@ public class SignUpDTO {
 	private String phoneNo;
 	private String address;
 	private String designation;
-
+	
 }

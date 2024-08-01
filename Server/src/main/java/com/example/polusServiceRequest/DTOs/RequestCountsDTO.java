@@ -10,5 +10,8 @@ public class RequestCountsDTO {
 	private Long assignedRequests;
 	private Long approvedRequests;
 	private Long rejectedRequests;
-	
+	private Long assignedToMeRequests;
+	private Long adminApproveRequests;
+	private Long adminRejectRequests;
+
 }

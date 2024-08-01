@@ -10,5 +10,7 @@ public class CommentDetailsDTO {
 	private Long commentId;
 	private String Comment;
 	private PersonDTO commentUser;
+	private StatusDTO status;
 	private Timestamp commentTimestamp;
+
 }

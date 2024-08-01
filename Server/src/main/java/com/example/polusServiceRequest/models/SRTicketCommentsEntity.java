@@ -35,4 +35,14 @@ public class SRTicketCommentsEntity {
 
     @Column(name = "COMMENT_TIMESTAMP", nullable = false)
     private Timestamp commentTimestamp;
+    
+    @ManyToOne
+    @JoinColumn(name = "STATUS_CODE", referencedColumnName = "STATUS_CODE")
+    private SRTicketStatusEntity statusCode;
+    
+    
+
+	
+    
+    
 }

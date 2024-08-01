@@ -14,6 +14,6 @@ public interface LoginService {
 
 	List<CountryEntity> getAllCountries();
 
-	
+	SignInResponseDTO editUserDetails(SignUpDTO userDetails);
 
 }

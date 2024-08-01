@@ -24,7 +24,4 @@ public interface PersonRepository extends JpaRepository<PersonEntity, Long> {
 			+ "    AND r2.roleName = 'APPLICATION_ADMINISTRATOR' " + ")")
 	List<PersonEntity> findPrincipalInvestigatorsNotAdmins();
 
-//	@Query("SELECT p FROM PersonEntity p JOIN p.roles r WHERE p.personId = :personId AND r.role.roleName = :roleName")
-//	PersonEntity findByPersonIdAndRoleName(@Param("personId") Long personId, @Param("roleName") Long roleId);
-
 }

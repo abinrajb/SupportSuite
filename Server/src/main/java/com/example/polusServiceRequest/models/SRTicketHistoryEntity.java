@@ -36,4 +36,8 @@ public class SRTicketHistoryEntity {
     @Column(name = "UPDATE_TIMESTAMP")
     private Timestamp updateTimestamp;
 
+	
+    
+    
+
 }

@@ -1,6 +1,7 @@
 package com.example.polusServiceRequest.DTOs;
 
 import java.sql.Timestamp;
+import java.util.List;
 
 import lombok.Data;
 
@@ -14,5 +15,6 @@ public class TicketResponseDTO {
 	private PersonDTO assignedTo;
 	private Timestamp createTimestamp;
 	private Timestamp updateTimestamp;
-	private CommentDetailsDTO comment;
+	private List<CommentDetailsDTO> comment;
+
 }

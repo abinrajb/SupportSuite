@@ -18,18 +18,14 @@ public class SRTicketCategoryServiceImpl implements SRTicketCategoryService {
 	@Override
 	public List<SRTicketCategoryDTO> getAllCategories() {
 		List<SRTicketCategoryEntity> categories = categoryRepository.findAll();
-		
 		List<SRTicketCategoryDTO> ticketDTOs = new ArrayList<>();
-
 		for (SRTicketCategoryEntity category : categories) {
 			SRTicketCategoryDTO dto = new SRTicketCategoryDTO();
 			dto.setCategoryCode(category.getCategoryCode());
 			dto.setCategoryName(category.getCategoryName());
-			dto.setDescription(category.getDescription());	
+			dto.setDescription(category.getDescription());
 			ticketDTOs.add(dto);
 		}
 		return ticketDTOs;
-		
+	}
 }
-}
-	
