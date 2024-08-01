@@ -21,11 +21,11 @@
                           </div>
                       </td>
                       <td>
-                          <p class="fw-bold mb-1">{{ ticket?.category.categoryName }}</p>
+                          <p class="fw-bold mb-1">{{ ticket?.category?.categoryName }}</p>
                       </td>
                       <td class="description" title="{{ticket?.requestDescription}}">{{ ticket?.requestDescription }}</td>
                       <td>
-                          <span class="badge text-bg-warning">{{ ticket?.statusDescription.status }}</span>
+                          <span class="badge text-bg-warning">{{ ticket?.statusDescription?.status }}</span>
                       </td>
                       <td>{{ getTime(ticket.updateTimestamp) }}</td>
                       <td>

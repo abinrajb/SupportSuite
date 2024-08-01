@@ -51,7 +51,7 @@ export class DashBoardComponent implements OnInit {
         this._sharedService.getAllRequestCount().subscribe({
          next: (response: any) => {
              this.allRequestCount=response;
-             const totalRequestCount = response.assignedRequests; 
+             const totalRequestCount = response.assignedToMeRequests; 
              this.totalPages = Math.ceil(totalRequestCount / 10);
              this.getAllAssignedToMe();
          },

@@ -89,6 +89,12 @@
     "changeOrigin": true,
     "pathRewrite": {"^/makeAdmin" : ""}
   },
+  "/removeAdmin": {
+    "target": "http://10.199.100.141:8080/api/removeAdmin",
+    "secure": false,
+    "changeOrigin": true,
+    "pathRewrite": {"^/removeAdmin" : ""}
+  },
   "/createNewServiceCategory": {
     "target": "http://10.199.100.141:8080/api/createNewServiceCategory",
     "secure": false,

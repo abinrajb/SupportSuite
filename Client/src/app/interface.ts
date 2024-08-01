@@ -12,31 +12,20 @@ export interface Country {
     countryCodeIso2: string;
 }
 
-export interface Category {
-  categoryCode: string;
-  categoryName: string;
-  description: string;
-}
+
 
 export interface Admins{
   personId: string,
   name: string
 }
 
-export interface StatusDescription {
-  statusCode: string;
-  statusDescription: string;
+
+export interface Users{
+     adminID:number,
+     personId:number,
+     role:number
 }
 
-export interface Ticket {
-  ticketId: number;
-  category: Category | null;
-  requestDescription: string;
-  statusDescription: StatusDescription | null;
-  assignedTo: string | null;
-  createTimestamp: string;
-  updateTimestamp: string;
-}
 
 export interface TicketFetchPayLoad{
     personID:number,
@@ -65,3 +54,13 @@ export interface TicketFetchPayLoad{
     roles: Role[];
   }
   
+export interface RequestCount {
+    totalRequests: number;
+    inProgressRequests: number;
+    assignedRequests: number;
+    approvedRequests: number;
+    rejectedRequests: number;
+    assignedToMeRequests: number;
+    adminApproveRequests: number;
+    adminRejectRequests: number;
+}

@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { SharedService } from '../../../shared.service';
 import { Router } from '@angular/router';
-import { Admins } from '../../../interface';
+import { Admins,Users } from '../../../interface';
 import Swal from 'sweetalert2';
 
 @Component({
@@ -11,9 +11,16 @@ import Swal from 'sweetalert2';
 })
 export class NewAdminComponent implements OnInit {
   
+  allAdmins:any;
+  allAdministrator:Admins[]=[];
   allUsers: Admins[] = [];
   loggedInUser: any;
   makeAdminPayload: any={
+    adminID:null,
+    role:1,
+    personId:null
+  }
+  revokeAdminPayload: any={
     adminID:null,
     role:1,
     personId:null
@@ -24,7 +31,8 @@ export class NewAdminComponent implements OnInit {
   ngOnInit() {
     this.checkUserAuthentication();
     this.loggedInUser = this._sharedService.getLoggedInUser();
-    this.getAllUsers()
+    this.getAllUsers();
+    this.getAllAdmin();
   }
 
   private checkUserAuthentication(): void {
@@ -52,10 +60,41 @@ export class NewAdminComponent implements OnInit {
             Swal.fire({
                 position: "center",
                 icon: "success",
-                title: "New service category created",
+                title: "Assigned admin privileges",
                 showConfirmButton: false,
                 timer: 1500
             });
+            this.getAllUsers();
+        },
+        error: (err) => {
+          console.error('Failed to fetch users', err);
+        }
+    });
+  }
+
+  private getAllAdmin(): void {
+    this._sharedService.getAdmin().subscribe({
+    next: (data) => {
+    this.allAdministrator = data;
+    },
+    error: (err) => {
+    console.error('Failed to fetch admins', err);
+    }
+      });
+    }
+
+  public revokeAdmin() : void{
+    this.revokeAdminPayload.adminID=this.loggedInUser.personId;
+    this._sharedService.revokeAdmin(this.revokeAdminPayload).subscribe({
+        next: (any) => {
+            Swal.fire({
+                position: "center",
+                icon: "success",
+                title: "Revoke Admin privileges",
+                showConfirmButton: false,
+                timer: 1500
+            });
+            this.getAllAdmin();
         },
         error: (err) => {
           console.error('Failed to fetch users', err);

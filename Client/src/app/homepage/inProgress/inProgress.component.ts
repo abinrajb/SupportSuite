@@ -1,11 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { SharedService } from '../../shared.service';
 import { Router } from '@angular/router';
-import { Category } from './inpro-interface';
-import { Admins } from '../../interface';
-import { TicketFetchPayLoad } from '../../interface';
+import { Admins,TicketFetchPayLoad} from '../../interface';
 import Swal from 'sweetalert2';
-import { EditReqObjPayload } from '../homePageInterface';
+import { EditReqObjPayload, Ticket ,Category} from '../homePageInterface';
 
 
 @Component({
@@ -17,7 +15,7 @@ export class InProgressComponent implements OnInit {
 
 
 
-  inProgressTickets: any = [];
+  inProgressTickets: Ticket[] = [];
   loggedInUser: any;
   pageNumber:number=0;
   deleteTicketVariable:number=0;
@@ -66,7 +64,7 @@ export class InProgressComponent implements OnInit {
         this.isResponseSent = false;
       }
     
-      public getTime(timestamp: string): string {
+    public getTime(timestamp: string): string {
         const NOW = new Date();
         const PASTDATE = new Date(timestamp);
         const SECONDSAGO = Math.floor((NOW.getTime() - PASTDATE.getTime()) / 1000);
@@ -92,13 +90,10 @@ export class InProgressComponent implements OnInit {
             return SECONDSAGO === 1 ? '1 second ago' : `${SECONDSAGO} seconds ago`;
         }
     }
-    public pageNumberFun(page:number) {
-            this.pageNumber=page;
-            this.loadInProgressTickets();
 
-    }
+
     public loadInProgressTickets() {
-    const ticketFetchPayLoad: TicketFetchPayLoad = {
+        const ticketFetchPayLoad: TicketFetchPayLoad = {
         personID: this.loggedInUser.personId,
         statusType: 1,
         pageNumber: this.pageNumber,
@@ -115,22 +110,8 @@ export class InProgressComponent implements OnInit {
     });
     }
 
-    private getAllRequestCount(): void{
-    this._sharedService.getAllRequestCount().subscribe({
-        next: (response: any) => {
-            this.allRequestCount=response;
-            const totalRequestCount = response.inProgressRequests; 
-            this.totalPages = Math.ceil(totalRequestCount / 10);
-            this.loadInProgressTickets();
-        },
-        error: (err) => {
-    
-        }
-    });
-    }
-
     private getCategories(): void {
-    this._sharedService.getCategories().subscribe({
+        this._sharedService.getCategories().subscribe({
         next: (data: Category[]) => {
         this.categories = data;
         },
@@ -141,7 +122,7 @@ export class InProgressComponent implements OnInit {
     }
 
     private getAdmin(): void {
-    this._sharedService.getAdmin().subscribe({
+        this._sharedService.getAdmin().subscribe({
         next: (data: Admins[]) => {
         this.administrator = data;
         },
@@ -152,13 +133,13 @@ export class InProgressComponent implements OnInit {
     }
 
     public currentTicket(ticket: any): void {
-    this.assignTicketObj.ticketId = ticket.ticketId;
-    this.editReqObjPayload = {
-        requestDescription: ticket.requestDescription,
-        ticketId: ticket.ticketId,
-        personId: this.loggedInUser.personId,
-        category: ticket.category.categoryCode
-    };
+        this.assignTicketObj.ticketId = ticket.ticketId;
+        this.editReqObjPayload = {
+            requestDescription: ticket.requestDescription,
+            ticketId: ticket.ticketId,
+            personId: this.loggedInUser.personId,
+            category: ticket.category.categoryCode
+        };
     }
 
     public saveChanges(): void {
@@ -185,8 +166,7 @@ export class InProgressComponent implements OnInit {
             title: "Successfully Edited",
             showConfirmButton: false,
             timer: 2000
-            });
-        return; 
+            }); 
         },
         error: (err) => {
            console.error('Failed to update ticket', err);
@@ -200,7 +180,7 @@ export class InProgressComponent implements OnInit {
     }
 
     public deleteTicket(): void {
-    this._sharedService.deleteInProgress(this.deleteTicketVariable).subscribe({
+        this._sharedService.deleteInProgress(this.deleteTicketVariable).subscribe({
         next: (response: any) => {
         this.loadInProgressTickets();
         },
@@ -226,6 +206,29 @@ export class InProgressComponent implements OnInit {
         }
     });
     }
+
+    
+    private getAllRequestCount(): void{
+        this._sharedService.getAllRequestCount().subscribe({
+        next: (response: any) => {
+            this.allRequestCount=response;
+            const totalRequestCount = response.inProgressRequests; 
+            this.totalPages = Math.ceil(totalRequestCount / 10);
+            this.loadInProgressTickets();
+        },
+        error: (err) => {
+    
+        }
+    });
+    }
+
+
+    
+    public pageNumberFun(page:number) {
+        this.pageNumber=page;
+        this.loadInProgressTickets();
+    }
+
 
     public getPagesArray(): number[] {
         return Array.from({ length: this.totalPages }, (_, i) => i);

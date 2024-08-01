@@ -1,8 +1,9 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { InproInterface } from './homepage/inProgress/inpro-interface';
-import { Category, Admins, Country, User } from './interface';
+import { TicketInterface } from './homepage/inProgress/inpro-interface';
+import { Category } from './homepage/homePageInterface';
+import {  Admins, Country, User, RequestCount } from './interface';
 
 
 @Injectable({
@@ -74,30 +75,25 @@ export class SharedService {
         return this.inProgressUser;
     }
 
-    getAllServiceTicket(ticketFetchPayLoad:any): Observable<InproInterface> {
-        return this._http.post<InproInterface>(`/getTicketsBasedOnStatus`,ticketFetchPayLoad);
+    getAllServiceTicket(ticketFetchPayLoad:any): Observable<TicketInterface> {
+        return this._http.post<TicketInterface>(`/getTicketsBasedOnStatus`,ticketFetchPayLoad);
     }
 
     assignTicket(assignPayLoad: any): Observable<any> {
         return this._http.post<any>(`assignTicket`,assignPayLoad)
     }
 
-    getAllRequestCount() : Observable<InproInterface> {
-        return this._http.get<InproInterface>(`/getAllRequestCount/${this.loggedInUser.personId}`);
+    getAllRequestCount() : Observable<RequestCount> {
+        return this._http.get<RequestCount>(`/getAllRequestCount/${this.loggedInUser.personId}`);
     }
 
-    getAllTickets() : Observable<InproInterface> {
-        return this._http.get<InproInterface>(`/getAllTickets/${this.loggedInUser.personId}`);
+    getAllTickets() : Observable<TicketInterface> {
+        return this._http.get<TicketInterface>(`/getAllTickets/${this.loggedInUser.personId}`);
     }
 
-    clearUserSession(): void {
-        this.loggedInUser = null;
-        sessionStorage.removeItem('loggedInUser');
-        
-    }
 
-    getAllAssignedToMe(approvedticketFetchPayLoad:any) : Observable<InproInterface>{
-        return this._http.post<InproInterface>(`/getAllAssignedToMeTickets`,approvedticketFetchPayLoad);
+    getAllAssignedToMe(approvedticketFetchPayLoad:any) : Observable<TicketInterface>{
+        return this._http.post<TicketInterface>(`/getAllAssignedToMeTickets`,approvedticketFetchPayLoad);
     }
 
     statusChangeToApprovedOrRejected(ApprovedOrRejectedPayLoad:any) : Observable<any>{
@@ -108,8 +104,18 @@ export class SharedService {
         return this._http.post<any>(`/makeAdmin`,newAdminPayLoad);
     }
 
+    revokeAdmin(revokeAdminPayload:any): Observable<any>{
+        return this._http.post<any>(`/removeAdmin`,revokeAdminPayload);
+    }
+
     createNewServiceCategory(newServicePayLoad:any): Observable<any>{
         return this._http.post<any>(`/createNewServiceCategory`,newServicePayLoad);
     }
 
+
+    clearUserSession(): void {
+        this.loggedInUser = null;
+        sessionStorage.removeItem('loggedInUser');
+        
+    }
 }

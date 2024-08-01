@@ -38,7 +38,7 @@
                         {{ ticket?.statusDescription?.status }}
                     </span>
                 </td>   
-                <td id="created-time-{{ ticket.id }}">{{ getTime(ticket.createTimestamp) }}</td>
+                <td id="created-time-{{ ticket.id }}">{{ getTime(ticket.updateTimestamp) }}</td>
                 <td *ngIf="ticket.assignedTo !== null" id="assigned-to-{{ ticket.id }}">
                     {{ ticket.assignedTo?.name }}
                 </td>

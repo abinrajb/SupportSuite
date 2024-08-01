@@ -1,7 +1,7 @@
 import { Component, OnInit, AfterViewInit } from '@angular/core';
 import { SharedService } from '../../shared.service';
 import { Router } from '@angular/router';
-import { Category } from '../../interface';
+import { Category } from '../homePageInterface'; 
 import Swal from 'sweetalert2';
 
 @Component({
