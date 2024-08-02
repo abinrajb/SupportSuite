@@ -1,49 +1,41 @@
-<div class="container mb-5">
-    <div class="row justify-content-center">
-        <div class="col-md-8">
-            <div class="card">
-                <div class="card-header bg-dark text-white">
-                    <h4>Make a Service Request</h4>
-                </div>
-                <div class="card-body">
-                    <form class="row g-3" aria-label="Service Request Form">
-                        <div class="col-12">
-                            <label for="selectService" class="form-label" aria-label="Select Service">Service</label>
-                            <div class="position-relative">
-                                <select class="form-control border-2 custom-select-icon" id="selectService" name="selectService" [(ngModel)]="selectService" required aria-label="Select a service" aria-required="true">
-                                    <option value=0 disabled selected>Select a category</option>
-                                    <option *ngFor="let category of categories" [ngValue]="category?.categoryCode">{{ category.categoryName }}</option>
-                                </select>
-                                <i class="fas fa-caret-down dropdown-icon"></i>
-                            </div>
-                        </div>
-                                                
-                        <div class="col-12 position-relative">
-                            <label for="serviceDescription" class="form-label border-2" aria-label="Service Description">Description</label>
-                            <textarea class="form-control" name="serviceDescription" [(ngModel)]="makeReqObj.requestDescription"
-                                      id="serviceDescription" required aria-required="true" placeholder="Description should be below 200 characters"
-                                      aria-label="Describe your service request"></textarea>
-                            <div *ngIf="errorMap.has('descriptionErrorMessage')" class="text-danger">
-                              {{errorMap.get('descriptionErrorMessage')}}
-                            </div>
-                            <div *ngIf="errorMap.has('serviceErrorMessage')" class="text-danger">
-                              {{errorMap.get('serviceErrorMessage')}}
-                            </div>
-                        </div>    
-                        <div class="col-md-12 text-end">
-                            <button class="btn btn-danger me-2 col-2" type="button" (click)="clearForm()" aria-label="Clear Form" title="Clear the form">
-                                <i class="bi bi-trash"></i> 
-                            </button>
-                            <button class="btn btn-success col-2" type="submit" (click)="addInProgress();scrollToElement('inProgressComponent')" aria-label="Add Service Request" title="Create a new service request">
-                                <i class="bi bi-check2"></i> 
-                            </button>
-                        </div>
-                    </form>
-                </div>
-            </div>
+<form>
+    <div class="mb-3">
+        <h4>New Service Request</h4>
+    </div>
+    <div class="mb-3">
+        <label for="selectService" class="form-label" aria-label="Select Service">Service</label>
+        <div class="position-relative">
+            <select class="form-control border-2 custom-select-icon" id="selectService" name="selectService" [(ngModel)]="selectService" required aria-label="Select a service" aria-required="true">
+                <option value=0 disabled selected>Select a category</option>
+                <option *ngFor="let category of categories" [ngValue]="category?.categoryCode">{{ category.categoryName }}</option>
+            </select>
+            <i class="fas fa-caret-down dropdown-icon"></i>
+        </div>
+        <div id="emailHelp" class="form-text">select a category from the drop down to continue<span class="text-danger">*</span></div>
+    </div>
+    <div class="mb-3">
+        <label for="serviceDescription" class="form-label border-2" aria-label="Service Description">Description</label>
+        <textarea class="form-control border-2" name="serviceDescription" [(ngModel)]="makeReqObj.requestDescription"
+                  id="serviceDescription" required aria-required="true" placeholder="service Description"
+                  aria-label="Describe your service request"></textarea>
+        <div id="descriptionlabeldown" class="form-text">Description should be below 200 characters<span class="text-danger">*</span></div>
+        <div *ngIf="errorMap.has('descriptionErrorMessage')" class="text-danger">
+          {{errorMap.get('descriptionErrorMessage')}}
+        </div>
+        <div *ngIf="errorMap.has('serviceErrorMessage')" class="text-danger">
+          {{errorMap.get('serviceErrorMessage')}}
         </div>
     </div>
-</div>
-<div *ngIf="showInProgressComponent">
+    <div class="col-md-12 text-end">
+        <button class="btn btn-secondary me-2 col-2" type="button" (click)="clearForm()" aria-label="Clear Form" title="Clear the form">
+            <i class="bi bi-trash"></i>clear 
+        </button>
+        <button class="btn btn-primary col-2" type="submit" (click)="addInProgress();scrollToElement('inProgressComponent')" aria-label="Add Service Request" title="Create a new service request">
+            <i class="bi bi-check2"></i>submit 
+        </button>
+    </div>
+  </form>
+
+  <div *ngIf="showInProgressComponent">
     <app-inProgress id="inProgressComponent"></app-inProgress>
 </div>

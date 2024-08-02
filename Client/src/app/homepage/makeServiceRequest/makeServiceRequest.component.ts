@@ -107,9 +107,9 @@ export class MakeServiceRequestComponent implements OnInit {
 
   public clearForm(): void {
     this.makeReqObj = {
-      category: '',
+      category: 0,
       requestDescription: '',
-      personId: null
+      personId: 0
     };
     this.errorMap.clear();
   }

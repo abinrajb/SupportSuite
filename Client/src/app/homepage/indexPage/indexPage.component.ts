@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { SharedService } from '../../shared.service';
+import { HomepageService } from '../homepage.service';
 import { Router } from '@angular/router';
 
 @Component({
@@ -11,8 +12,12 @@ import { Router } from '@angular/router';
 export class IndexPageComponent implements OnInit {
 
   allRequestCount: any ={}
+  indexFlag:boolean=false;
+  activeButtonCSR:boolean=false;
 
-  constructor(private _sharedService : SharedService, private _router: Router) { }
+  constructor(private _sharedService : SharedService,
+              private _router: Router,
+              private _homeService:HomepageService) { }
 
   ngOnInit() {
     this.checkUserAuthentication()
@@ -27,6 +32,7 @@ export class IndexPageComponent implements OnInit {
   }
 
   public goToMakeServiceRequest() {
+    this._homeService.ActivateButtons(2);
     this._router.navigate(['homepage/makeReq']);
   }
 
@@ -41,6 +47,7 @@ export class IndexPageComponent implements OnInit {
        });
     }
     public scrollToElement(elementId: string) {
+        this.indexFlag=true;
         const element = document.getElementById(elementId);
         if (element) {
           element.scrollIntoView({ behavior: 'smooth', block: 'center' });

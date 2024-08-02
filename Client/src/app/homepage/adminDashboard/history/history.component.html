@@ -30,17 +30,19 @@
                 <td class="description" id="request-description-{{ ticket.id }}">{{ ticket?.requestDescription }}</td>
                 <td id="request-status-{{ ticket.id }}">
                     <span class="badge" [ngClass]="{
-                        'text-bg-info': ticket?.statusDescription?.status === 'Assigned',
-                        'text-bg-warning': ticket?.statusDescription?.status === 'In Progress',
-                        'bg-success': ticket?.statusDescription?.status === 'Approved',
-                        'bg-danger': ticket?.statusDescription?.status === 'Rejected'
+                        'text-bg-info': ticket?.status?.statusDescription === 'Assigned',
+                        'text-bg-warning': ticket?.status?.statusDescription === 'In Progress',
+                        'bg-success': ticket?.status?.statusDescription === 'Approved',
+                        'bg-danger': ticket?.status?.statusDescription === 'Rejected'
                     }">
-                        {{ ticket?.statusDescription?.status }}
+                        {{ ticket?.status?.statusDescription }}
                     </span>
                 </td>   
                 <td id="update-time-{{ ticket.id }}">{{ getTime(ticket.updateTimestamp) }}</td>
                 <td class="description" id="assigned-to-{{ ticket.id }}">
-                    {{ ticket.comment?.comment }}
+                    <div *ngFor="let tickets of ticket?.comment" title="{{tickets.comment}}">
+                        {{ tickets?.comment }}
+                      </div>
                 </td>
             </tr>
             <tr *ngFor="let ticket of allRejectedTickets" class="ticket-card" id="ticket-{{ ticket.id }}">
@@ -61,18 +63,20 @@
                 <td class="description" id="request-description-{{ ticket.id }}">{{ ticket?.requestDescription }}</td>
                 <td id="request-status-{{ ticket.id }}">
                     <span class="badge" [ngClass]="{
-                        'text-bg-info': ticket?.statusDescription?.status === 'Assigned',
-                        'text-bg-warning': ticket?.statusDescription?.status === 'In Progress',
-                        'bg-success': ticket?.statusDescription?.status === 'Approved',
-                        'bg-danger': ticket?.statusDescription?.status === 'Rejected'
+                        'text-bg-info': ticket?.status?.statusDescription === 'Assigned',
+                        'text-bg-warning': ticket?.status?.statusDescription === 'In Progress',
+                        'bg-success': ticket?.status?.statusDescription === 'Approved',
+                        'bg-danger': ticket?.status?.statusDescription === 'Rejected'
                     }">
-                        {{ ticket?.statusDescription?.status }}
+                        {{ ticket?.status?.statusDescription }}
                     </span>
                 </td>   
                 <td id="update-time-{{ ticket.id }}">{{ getTime(ticket.updateTimestamp) }}</td>
-                <td class="description" id="assigned-to-{{ ticket.id }}">
-                    {{ ticket.comment?.comment }}
-                </td>
+                <td id="comments" >
+                    <div *ngFor="let tickets of ticket?.comment" title="{{tickets.comment}}">
+                        {{ tickets?.comment }}
+                      </div>
+                  </td>
             </tr>
 
         </tbody>

@@ -12,16 +12,16 @@ export interface Category {
 }
 
 
-export interface StatusDescription {
+export interface Status {
     statusCode: string;
-    status: string;
+    statusDescription: string;
 }
   
 export interface Ticket {
     ticketId: number;
     category: Category | null;
     requestDescription: string;
-    statusDescription: StatusDescription | null;
+    status: Status | null;
     assignedTo: string | null;
     createTimestamp: string;
     updateTimestamp: string;

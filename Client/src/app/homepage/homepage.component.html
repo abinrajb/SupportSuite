@@ -19,23 +19,26 @@
         <!-- Sidebar -->
         <nav class="col-md-3 col-lg-2 d-md-block bg-dark sidebar d-none d-md-block" aria-label="Sidebar">
             <div class="position-sticky">
-                <ul class="nav flex-column">
+                <ul class="navbar-nav">
                     <li class="nav-item">
-                        <a class="nav-link active" routerLink="indexPage" routerLinkActive="active" aria-label="button to access homepage" tabindex="0" aria-current="page">Home</a>
+                        <a class="nav-link ms-1" (click)="setActive(1)" [ngClass]="{ 'active-link': activeButtonHome }" routerLink="indexPage" routerLinkActive="active" aria-current="page">
+                             Home<i class="fas fa-home ms-2"></i>
+                        </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" routerLink="makeReq" routerLinkActive="active" aria-label="button to access make request page" tabindex="0">Create Service Request</a>
+                        <a class="nav-link ms-1" (click)="setActive(2)" [ngClass]="{ 'active-link': activeButtonCSR }" routerLink="makeReq" routerLinkActive="active">
+                            Create Request<i class="fas fa-plus-circle ms-2"></i> 
+                        </a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link" routerLink="inPro" routerLinkActive="active" aria-label="button to access inprogress requests" tabindex="0">Request In Progress</a>
+                    <li class="nav-item ms-1">
+                        <a *ngIf="isAdmin()" (click)="setActive(3)" [ngClass]="{ 'active-link': activeButtonAD }" routerLink="AdminDashboard" class="nav-link" id="AdminDashboardLink" aria-label="button to access admin dashboard" tabindex="0">
+                            Admin Dashboard<i class="fas fa-tachometer-alt ms-2"></i>
+                        </a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link" routerLink="assignedReq" routerLinkActive="active" aria-label="button to access assigned request" tabindex="0">Request Assigned</a>
-                    </li>
-                    <li class="nav-item">
-                        <a  *ngIf="isAdmin()" routerLink="AdminDashboard" class="nav-link" id="AdminDashboardLink"  aria-label="button to access admin dashboard" tabindex="0">Admin Dashboard</a>
+                    <li>
                     </li>
                 </ul>
+                
             </div>
         </nav>
 
@@ -48,19 +51,19 @@
                 <div class="collapse navbar-collapse" id="navbarSidebar">
                     <ul class="navbar-nav">
                         <li class="nav-item">
-                            <a class="nav-link active" routerLink="indexPage" routerLinkActive="active" aria-current="page">Home</a>
+                            <a class="nav-link active ms-1" routerLink="indexPage" routerLinkActive="active" aria-current="page">
+                                 Home<i class="fas fa-home ms-2"></i>
+                            </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" routerLink="makeReq" routerLinkActive="active">Create Service Request</a>
+                            <a class="nav-link ms-1" routerLink="makeReq" routerLinkActive="active">
+                                Create Request<i class="fas fa-plus-circle ms-2"></i> 
+                            </a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link" routerLink="inPro" routerLinkActive="active">Request In Progress</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" routerLink="assignedReq" routerLinkActive="active">Request Assigned</a>
-                        </li>
-                        <li class="nav-item">
-                            <a  *ngIf="isAdmin()" routerLink="AdminDashboard" class="nav-link" id="AdminDashboardLink"  aria-label="button to access admin dashboard" tabindex="0">Admin Dashboard</a>
+                        <li class="nav-item ms-1">
+                            <a *ngIf="isAdmin()" routerLink="AdminDashboard" class="nav-link" id="AdminDashboardLink" aria-label="button to access admin dashboard" tabindex="0">
+                                Admin Dashboard<i class="fas fa-tachometer-alt ms-2"></i>
+                            </a>
                         </li>
                     </ul>
                 </div>

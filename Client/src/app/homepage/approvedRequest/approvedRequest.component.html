@@ -32,7 +32,7 @@
               </td>
               <td class="description" id="request-description-{{ i }}" title="{{ticket?.requestDescription}}">{{ ticket?.requestDescription }}</td>
               <td id="request-status-{{ i }}">
-                <span class="badge bg-success">{{ ticket?.statusDescription?.status }}</span>
+                <span class="badge bg-success">{{ ticket?.status?.statusDescription }}</span>
               </td>
               <td id="created-time-{{ i }}">{{ getTime(ticket.updateTimestamp) }}</td>
               <td id="comments-{{ i }}" title="{{ ticket?.comment?.comment }}">

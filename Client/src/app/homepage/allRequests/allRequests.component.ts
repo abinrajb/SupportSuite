@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { SharedService } from '../../shared.service';
 import { Route, Router } from '@angular/router';
+import * as bootstrap from 'bootstrap';
 
 @Component({
   selector: 'app-allRequests',
@@ -19,6 +20,7 @@ export class AllRequestsComponent implements OnInit {
         this.checkUserAuthentication();
         this.loadAllTickets();
     }
+
 
     private checkUserAuthentication(): void {
         const loggedInUser = sessionStorage.getItem('loggedInUser');

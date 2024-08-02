@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { SharedService } from '../../../shared.service';
 import { Router } from '@angular/router';
-import { Admins,Users } from '../../../interface';
+import { Admins } from '../../../interface';
 import Swal from 'sweetalert2';
 
 @Component({
@@ -18,12 +18,12 @@ export class NewAdminComponent implements OnInit {
   makeAdminPayload: any={
     adminID:null,
     role:1,
-    personId:null
+    personId:0
   }
   revokeAdminPayload: any={
     adminID:null,
     role:1,
-    personId:null
+    personId:0
   }
 
   constructor(private _sharedService:SharedService , private _router:Router) {}

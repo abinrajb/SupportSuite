@@ -30,7 +30,7 @@
                       </td>
                       <td class="description" title="{{ticket?.requestDescription}}">{{ ticket?.requestDescription }}</td>
                       <td>
-                          <span class="badge bg-danger">{{ ticket?.statusDescription?.status }}</span>
+                          <span class="badge bg-danger">{{ ticket?.status?.statusDescription }}</span>
                       </td>
                       <td>{{ getTime(ticket.updateTimestamp) }}</td>
                       <td class="description" title="{{ ticket?.comment?.comment }}">                

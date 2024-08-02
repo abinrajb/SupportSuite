@@ -33,6 +33,10 @@
 
 }
 
+.active-link {
+    color: gold !important;
+  }
+
 @media (max-width: 768px) {
 
   .sidebar {

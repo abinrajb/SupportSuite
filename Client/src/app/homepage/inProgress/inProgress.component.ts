@@ -33,7 +33,7 @@ export class InProgressComponent implements OnInit {
   };
   assignTicketObj: any = {
     ticketId: null,
-    assignedTo: null
+    assignedTo: 0
   };
 
   constructor(private _sharedService: SharedService, private _router: Router) { }

@@ -15,6 +15,26 @@
     min-width: 40px; 
     flex: 0 0 auto; 
 }
+
+
+.position-relative {
+    position: relative;
+  }
+  
+
+  .dropdown-icon {
+    position: absolute;
+    top: 50%;
+    right: 10px;
+    transform: translateY(-50%);
+    pointer-events: none; 
+  }
+  
+
+  .custom-select-icon {
+    padding-right: 2.5rem;
+  }
+  
 @media (max-width: 576px) {
     .ticket-card button {
       width: 100%;

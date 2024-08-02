@@ -4,7 +4,7 @@
     <label for="MakeAdminID" class="form-label">Make Admin<span class="text-danger">*</span></label>
     <div class="position-relative">
         <select class="form-control border-2 custom-select-icon" id="MakeAdminID" [(ngModel)]="makeAdminPayload.personId" name="users" required tabindex="0">
-            <option value="" disabled selected>Select user</option>
+            <option value=0 disabled selected>Select user</option>
             <option *ngFor="let user of allUsers" [ngValue]="user.personId">{{ user.name }}</option>
         </select>
         <i class="fas fa-caret-down dropdown-icon"></i>
@@ -42,7 +42,7 @@
     <label for="RevokeAdminID" class="form-label">Revoke Admin<span class="text-danger">*</span></label>
     <div class="position-relative">
         <select class="form-control border-2 custom-select-icon" id="RevokeAdminID" [(ngModel)]="revokeAdminPayload.personId" name="users" required tabindex="0">
-            <option value="" disabled selected>Select admin</option>
+            <option value=0 disabled selected>Select admin</option>
             <option *ngFor="let admin of allAdministrator" [ngValue]="admin.personId">{{ admin.name }}</option>
         </select>
         <i class="fas fa-caret-down dropdown-icon"></i>

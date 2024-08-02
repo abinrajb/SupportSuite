@@ -25,6 +25,10 @@ export class AdminDashboardComponent implements OnInit {
     }
   }
 
+  public goToMakeServiceRequest() {
+    this._router.navigate(['homepage/makeReq']);
+  }
+
   private getAllRequestCount(): void{
     this._sharedService.getAllRequestCount().subscribe({
      next: (response: any) => {

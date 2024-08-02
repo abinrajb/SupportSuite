@@ -27,15 +27,15 @@
                 <td id="request-category-{{ ticket.id }}">
                     <p class="fw-bold mb-1">{{ ticket?.category?.categoryName }}</p>
                 </td>
-                <td class="description" id="request-description-{{ ticket.id }}">{{ ticket?.requestDescription }}</td>
+                <td class="description" id="request-description-{{ ticket.id }}" title="{ticket?.requestDescription}">{{ ticket?.requestDescription }}</td>
                 <td id="request-status-{{ ticket.id }}">
                     <span class="badge" [ngClass]="{
-                        'text-bg-info': ticket?.statusDescription?.status === 'Assigned',
-                        'text-bg-warning': ticket?.statusDescription?.status === 'In Progress',
-                        'bg-success': ticket?.statusDescription?.status === 'Approved',
-                        'bg-danger': ticket?.statusDescription?.status === 'Rejected'
+                        'text-bg-info': ticket?.status?.statusDescription === 'Assigned',
+                        'text-bg-warning': ticket?.status?.statusDescription === 'In Progress',
+                        'bg-success': ticket?.status?.statusDescription === 'Approved',
+                        'bg-danger': ticket?.status?.statusDescription === 'Rejected'
                     }">
-                        {{ ticket?.statusDescription?.status }}
+                        {{ ticket?.status?.statusDescription }}
                     </span>
                 </td>   
                 <td id="created-time-{{ ticket.id }}">{{ getTime(ticket.updateTimestamp) }}</td>
@@ -46,3 +46,4 @@
         </tbody>
     </table>
 </div>
+

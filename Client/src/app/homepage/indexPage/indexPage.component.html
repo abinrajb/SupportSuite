@@ -7,7 +7,7 @@
 
 <div class="row justify-content-between m-3">
     <div class="btn-group d-flex" role="group">
-        <button type="button" class="btn btn-dark position-relative col-2 me-3" (click)="scrollToElement('headingInbox')" 
+        <button type="button" class="btn btn-dark position-relative rounded col-2 me-3" (click)="scrollToElement('headingInbox')" 
             data-bs-toggle="collapse" data-bs-target="#collapseInbox" aria-expanded="false" aria-controls="collapseInbox" title="Show Inbox">
             Inbox
             <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
@@ -15,7 +15,7 @@
                 <span class="visually-hidden">unread messages</span>
             </span>
         </button>
-        <button type="button" class="btn btn-dark position-relative col-2 me-3" (click)="scrollToElement('headingInProgress')" 
+        <button type="button" class="btn btn-dark rounded position-relative col-2 me-3" (click)="scrollToElement('headingInProgress')" 
             data-bs-toggle="collapse" data-bs-target="#collapseInProgress" aria-expanded="true" aria-controls="collapseInProgress" title="Show In Progress">
             In Progress
             <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
@@ -23,7 +23,7 @@
                 <span class="visually-hidden">unread messages</span>
             </span>
         </button>
-        <button type="button" class="btn btn-dark position-relative col-2 me-3" (click)="scrollToElement('headingAssigned')" 
+        <button type="button" class="btn btn-dark rounded position-relative col-2 me-3" (click)="scrollToElement('headingAssigned')" 
             data-bs-toggle="collapse" data-bs-target="#collapseAssigned" aria-expanded="false" aria-controls="collapseAssigned" title="Show Assigned">
             Assigned
             <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
@@ -31,7 +31,7 @@
                 <span class="visually-hidden">unread messages</span>
             </span>
         </button>
-        <button type="button" class="btn btn-dark position-relative col-2 me-3" data-bs-toggle="collapse"  
+        <button type="button" class="btn btn-dark rounded position-relative col-2 me-3" data-bs-toggle="collapse"  
             data-bs-target="#collapseApproved" aria-expanded="false" aria-controls="collapseApproved" title="Show Approved">
             Approved
             <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
@@ -39,7 +39,7 @@
                 <span class="visually-hidden">unread messages</span>
             </span>
         </button>
-        <button type="button" class="btn btn-dark position-relative col-2" data-bs-toggle="collapse" 
+        <button type="button" class="btn btn-dark rounded position-relative col-2" data-bs-toggle="collapse" 
             data-bs-target="#collapseRejected" aria-expanded="false" aria-controls="collapseRejected" title="Show Rejected">
             Rejected
             <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
@@ -52,7 +52,7 @@
 
 <div class="accordion" id="accordionExampleOne">
     <div class="accordion-item">
-        <div id="collapseInbox" class="accordion-collapse collapse" data-bs-parent="#accordionExampleOne">
+        <div id="collapseInbox" *ngIf="indexFlag" class="accordion-collapse collapse" data-bs-parent="#accordionExampleOne">
             <div class="accordion-body">
                 <app-allRequests></app-allRequests>
             </div>

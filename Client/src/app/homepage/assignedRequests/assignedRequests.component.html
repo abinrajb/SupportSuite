@@ -29,7 +29,7 @@
                       </td>
                       <td class="description" title="{{ticket?.requestDescription}}">{{ ticket?.requestDescription }}</td>
                       <td>
-                          <span class="badge text-bg-info">{{ ticket?.statusDescription?.status }}</span>
+                          <span class="badge text-bg-info">{{ ticket?.status?.statusDescription }}</span>
                       </td>
                       <td>{{ getTime(ticket?.updateTimestamp) }}</td>
                       <td>{{ ticket?.assignedTo?.name }}</td>

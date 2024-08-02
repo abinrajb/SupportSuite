@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { SharedService } from '../shared.service';
+import { HomepageService } from './homepage.service';
 
 
 @Component({
@@ -13,9 +14,14 @@ export class HomepageComponent implements OnInit{
   isDropdownVisible: boolean = false;
   isLoggedIn: any = null;
   LoggedInUser: any ='';
-  activeButton: string = 'home';
+  activeButtonHome:boolean= true;
+  activeButtonCSR:boolean=false;
+  activeButtonAD:boolean=false;
 
-  constructor(private _router: Router, private _sharedService: SharedService) {}
+
+  constructor(private _router: Router,
+              private _sharedService: SharedService,
+              private _homeService:HomepageService) {}
   
   ngOnInit() {
      this.checkUserAuthentication()
@@ -45,9 +51,30 @@ export class HomepageComponent implements OnInit{
     this._router.navigate(['/homepage/userPro']);
   }
 
-  setActive(buttonName: string) {
-    this.activeButton = buttonName;
+  public setActive(buttonName: number) {
+    this._homeService.ActivateButtons(buttonName).subscribe({
+      next: (response: any) => {
+        if(response.activeButtonHome){
+           this.activeButtonHome=response.activeButtonHome;
+           this.activeButtonCSR=false;
+           this.activeButtonAD=false;
+        }
+        if(response.activeButtonCSR){
+            this.activeButtonCSR=response.activeButtonCSR;
+            this.activeButtonAD=false;
+            this.activeButtonHome=false;
+         }
+        if(response.activeButtonAD){
+            this.activeButtonAD=response.activeButtonAD;
+            this.activeButtonHome=false;
+            this.activeButtonCSR=false;
+         }
+      },
+      error: (err) => {
+      }
+    });
   }
+    
   
   public logout(event: Event): void {
     event.preventDefault();
