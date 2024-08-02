@@ -43,9 +43,6 @@ export class SignupComponent implements OnInit {
         this.sharedService.getCountries().subscribe({
             next: (data: Country[]) => {
                 this.countries = data.sort((a, b) => a.countryName.localeCompare(b.countryName));
-                if (this.countries.length > 0) {
-                    this.signupObj.country = this.countries[0].countryCode; 
-                }
             },
             error: (err) => {
                 console.error('Failed to fetch countries', err);

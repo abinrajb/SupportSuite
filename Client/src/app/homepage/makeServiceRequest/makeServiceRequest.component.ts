@@ -15,7 +15,7 @@ export class MakeServiceRequestComponent implements OnInit {
 
   loggedInUser: any;
   categories: Category[] = [];
-  selectService: any = {};
+  selectService:number=0;
   isResponseSent: boolean = true;
   errorMap = new Map<string, string>();
   showInProgressComponent: boolean = false;
@@ -57,7 +57,7 @@ export class MakeServiceRequestComponent implements OnInit {
 
   private requestInitialize(): void {
     this.makeReqObj.personId = this.loggedInUser.personId;
-    this.makeReqObj.category = this.selectService.categoryCode;
+    this.makeReqObj.category = this.selectService;
   }
 
 

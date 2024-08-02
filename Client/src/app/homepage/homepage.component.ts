@@ -13,6 +13,7 @@ export class HomepageComponent implements OnInit{
   isDropdownVisible: boolean = false;
   isLoggedIn: any = null;
   LoggedInUser: any ='';
+  activeButton: string = 'home';
 
   constructor(private _router: Router, private _sharedService: SharedService) {}
   
@@ -42,6 +43,10 @@ export class HomepageComponent implements OnInit{
   public userProfile(event: Event): void {
     event.preventDefault();
     this._router.navigate(['/homepage/userPro']);
+  }
+
+  setActive(buttonName: string) {
+    this.activeButton = buttonName;
   }
   
   public logout(event: Event): void {

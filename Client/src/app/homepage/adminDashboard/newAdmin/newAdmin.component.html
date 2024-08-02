@@ -1,10 +1,16 @@
-<h3 class="d-flex justify-content-start mb-5">Assign Admin privileges to User</h3>
+<h3 class="d-flex justify-content-start mb-5">Assign Admin privilege to User</h3>
 
-<label for="MakeAdminID" class="form-label">Make Admin<span class="text-danger">*</span></label>
-<select class="form-control border-2" id="MakeAdminID" [(ngModel)]="makeAdminPayload.personId" name="users" required tabindex="0">
-    <option value="" disabled selected>Select user</option>
-    <option *ngFor="let user of allUsers" [ngValue]="user.personId">{{ user.name }}</option>
-</select>
+<div class="col-12">
+    <label for="MakeAdminID" class="form-label">Make Admin<span class="text-danger">*</span></label>
+    <div class="position-relative">
+        <select class="form-control border-2 custom-select-icon" id="MakeAdminID" [(ngModel)]="makeAdminPayload.personId" name="users" required tabindex="0">
+            <option value="" disabled selected>Select user</option>
+            <option *ngFor="let user of allUsers" [ngValue]="user.personId">{{ user.name }}</option>
+        </select>
+        <i class="fas fa-caret-down dropdown-icon"></i>
+    </div>
+</div>
+
 <div class="d-flex justify-content-end">
     <button class="btn btn-success mt-2" data-bs-toggle="modal" data-bs-target="#newAdminPopUp">Make Admin</button>
 </div>
@@ -32,11 +38,17 @@
 
 
 <h3 class="d-flex justify-content-start mb-5">Revoke Admin privilege</h3>
-<label for="RevokeAdminID" class="form-label">Revoke Admin<span class="text-danger">*</span></label>
-<select class="form-control border-2" id="RevokeAdminID" [(ngModel)]="revokeAdminPayload.personId" name="users" required tabindex="0">
-    <option value="" disabled selected>Select admin</option>
-    <option *ngFor="let admin of allAdministrator" [ngValue]="admin.personId">{{ admin.name }}</option>
-</select>
+<div class="col-12">
+    <label for="RevokeAdminID" class="form-label">Revoke Admin<span class="text-danger">*</span></label>
+    <div class="position-relative">
+        <select class="form-control border-2 custom-select-icon" id="RevokeAdminID" [(ngModel)]="revokeAdminPayload.personId" name="users" required tabindex="0">
+            <option value="" disabled selected>Select admin</option>
+            <option *ngFor="let admin of allAdministrator" [ngValue]="admin.personId">{{ admin.name }}</option>
+        </select>
+        <i class="fas fa-caret-down dropdown-icon"></i>
+    </div>
+</div>
+
 <div class="d-flex justify-content-end">
     <button class="btn btn-success mt-2" data-bs-toggle="modal" data-bs-target="#revokeAdminPopUp">Revoke Admin</button>
 </div>

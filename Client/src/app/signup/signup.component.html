@@ -59,15 +59,19 @@
                     <div class="col-md-6 mb-2">
                         <div>
                             <label for="selectCountry">Country <span class="text-danger">*</span></label>
-                            <select class="form-control border-2" id="selectCountry" [(ngModel)]="countryObj" name="country" required tabindex="0">
-                                <option class="mt-3" value="" disabled>Select your country</option>
-                                <option *ngFor="let country of countries" [ngValue]="country.countryCode">{{ country.countryName }}</option>
-                            </select>
+                            <div class="position-relative">
+                                <select class="form-control border-2 custom-select-icon" id="selectCountry" [(ngModel)]="signupObj.country" name="country" required tabindex="0">
+                                    <option value="" disabled>Select your country</option>
+                                    <option *ngFor="let country of countries" [ngValue]="country.countryCode">{{ country.countryName }}</option>
+                                </select>
+                                <i class="fas fa-caret-down dropdown-icon"></i>
+                            </div>
                             <div *ngIf="errorMap.has('countryErrorMessage') && signupForm.submitted" class="text-danger small" role="alert">
                                 {{errorMap.get('countryErrorMessage')}}
                             </div>
                         </div>
                     </div>
+                    
                     <div class="col-md-6 mb-2">
                         <div>
                             <label for="signupPhnNo">Phone Number <span class="text-danger">*</span></label>

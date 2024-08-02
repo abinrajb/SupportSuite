@@ -63,6 +63,7 @@ export class ApprovedRequestComponent implements OnInit {
       this._sharedService.getAllServiceTicket(ticketFetchPayLoad).subscribe({
         next: (response: any) => {
           this.allAssignedTickets = response;
+          console.log(this.allAssignedTickets);
         },
         error: (err) => {
           console.error('Failed to fetch approved tickets', err);

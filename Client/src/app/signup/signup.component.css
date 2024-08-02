@@ -12,4 +12,21 @@ html, body {
 }
 
 
+.position-relative {
+    position: relative;
+}
+
+.custom-select-icon {
+    padding-right: 2.5rem;
+}
+
+.dropdown-icon {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    pointer-events: none;
+}
+
+
 

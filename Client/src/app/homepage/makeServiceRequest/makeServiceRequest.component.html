@@ -8,14 +8,18 @@
                 <div class="card-body">
                     <form class="row g-3" aria-label="Service Request Form">
                         <div class="col-12">
-                                <label for="selectService" class="form-label" aria-label="Select Service">Select Service</label>
-                                <select class="form-control border-2" id="selectService" name="selectService" [(ngModel)]="selectService" required aria-label="Select a service" aria-required="true">
-                                  <option value="" [ngValue]="null" disabled selected>Select a category</option>
-                                  <option *ngFor="let category of categories" [ngValue]="category">{{ category.categoryName }}</option>
+                            <label for="selectService" class="form-label" aria-label="Select Service">Service</label>
+                            <div class="position-relative">
+                                <select class="form-control border-2 custom-select-icon" id="selectService" name="selectService" [(ngModel)]="selectService" required aria-label="Select a service" aria-required="true">
+                                    <option value=0 disabled selected>Select a category</option>
+                                    <option *ngFor="let category of categories" [ngValue]="category?.categoryCode">{{ category.categoryName }}</option>
                                 </select>
+                                <i class="fas fa-caret-down dropdown-icon"></i>
+                            </div>
                         </div>
+                                                
                         <div class="col-12 position-relative">
-                            <label for="serviceDescription" class="form-label border-2" aria-label="Service Description">Service Description</label>
+                            <label for="serviceDescription" class="form-label border-2" aria-label="Service Description">Description</label>
                             <textarea class="form-control" name="serviceDescription" [(ngModel)]="makeReqObj.requestDescription"
                                       id="serviceDescription" required aria-required="true" placeholder="Description should be below 200 characters"
                                       aria-label="Describe your service request"></textarea>
