@@ -1,13 +1,16 @@
 <div class="card mb-3">
     <div class="card-header d-flex justify-content-between">
         <h3>Create New Service Request</h3>
-        <a class="btn btn-success" (click)="goToMakeServiceRequest()" tabindex="0" routerLinkActive="active">Create New Service Request</a>
+        <button class="btn btn-success" (click)="componentActivate('createService')" tabindex="0" aria-label="Create new service request"
+            data-bs-toggle="collapse" data-bs-target="#collapseNewService" aria-expanded="false" aria-controls="collapseNewService" title="Show new service">
+            Create New Service Request
+        </button>
     </div>
 </div>
-
+ 
 <div class="row justify-content-between m-3">
     <div class="btn-group d-flex" role="group">
-        <button type="button" class="btn btn-dark position-relative rounded col-2 me-3" (click)="scrollToElement('headingInbox')" 
+        <button type="button" class="btn btn-dark position-relative rounded col-2 me-3" (click)="componentActivate('Inbox')"
             data-bs-toggle="collapse" data-bs-target="#collapseInbox" aria-expanded="false" aria-controls="collapseInbox" title="Show Inbox">
             Inbox
             <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
@@ -15,7 +18,7 @@
                 <span class="visually-hidden">unread messages</span>
             </span>
         </button>
-        <button type="button" class="btn btn-dark rounded position-relative col-2 me-3" (click)="scrollToElement('headingInProgress')" 
+        <button type="button" class="btn btn-dark rounded position-relative col-2 me-3" (click)="componentActivate('InProgress')"
             data-bs-toggle="collapse" data-bs-target="#collapseInProgress" aria-expanded="true" aria-controls="collapseInProgress" title="Show In Progress">
             In Progress
             <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
@@ -23,7 +26,7 @@
                 <span class="visually-hidden">unread messages</span>
             </span>
         </button>
-        <button type="button" class="btn btn-dark rounded position-relative col-2 me-3" (click)="scrollToElement('headingAssigned')" 
+        <button type="button" class="btn btn-dark rounded position-relative col-2 me-3" (click)="componentActivate('Assigned')"
             data-bs-toggle="collapse" data-bs-target="#collapseAssigned" aria-expanded="false" aria-controls="collapseAssigned" title="Show Assigned">
             Assigned
             <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
@@ -31,7 +34,7 @@
                 <span class="visually-hidden">unread messages</span>
             </span>
         </button>
-        <button type="button" class="btn btn-dark rounded position-relative col-2 me-3" data-bs-toggle="collapse"  
+        <button type="button" class="btn btn-dark rounded position-relative col-2 me-3" data-bs-toggle="collapse" (click)="componentActivate('Approved')"
             data-bs-target="#collapseApproved" aria-expanded="false" aria-controls="collapseApproved" title="Show Approved">
             Approved
             <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
@@ -39,7 +42,7 @@
                 <span class="visually-hidden">unread messages</span>
             </span>
         </button>
-        <button type="button" class="btn btn-dark rounded position-relative col-2" data-bs-toggle="collapse" 
+        <button type="button" class="btn btn-dark rounded position-relative col-2" data-bs-toggle="collapse" (click)="componentActivate('rejected')"
             data-bs-target="#collapseRejected" aria-expanded="false" aria-controls="collapseRejected" title="Show Rejected">
             Rejected
             <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
@@ -49,40 +52,47 @@
         </button>
     </div>
 </div>
-
+ 
 <div class="accordion" id="accordionExampleOne">
     <div class="accordion-item">
-        <div id="collapseInbox" *ngIf="indexFlag" class="accordion-collapse collapse" data-bs-parent="#accordionExampleOne">
+        <div id="collapseNewService" class="collapse show" [ngClass]="{'collapse': !NewServiceFlag,}" data-bs-parent="#accordionExampleOne">
             <div class="accordion-body">
-                <app-allRequests></app-allRequests>
+                <app-makeServiceRequest *ngIf="NewServiceFlag"></app-makeServiceRequest>
             </div>
         </div>
     </div>
     <div class="accordion-item">
-        <div id="collapseInProgress" class="accordion-collapse collapse show" data-bs-parent="#accordionExampleOne">
+        <div id="collapseInbox" [ngClass]="{'collapse show': indexFlag,'collapse': !indexFlag}" data-bs-parent="#accordionExampleOne">
             <div class="accordion-body">
-                <app-inProgress></app-inProgress>
+                <app-allRequests *ngIf="indexFlag"></app-allRequests>
             </div>
         </div>
     </div>
     <div class="accordion-item">
-        <div id="collapseAssigned" class="accordion-collapse collapse" data-bs-parent="#accordionExampleOne">
+        <div id="collapseInProgress" [ngClass]="{'collapse show': inprogressFlag,'collapse': !inprogressFlag}" data-bs-parent="#accordionExampleOne">
             <div class="accordion-body">
-                <app-assignedRequests></app-assignedRequests>
+                <app-inProgress *ngIf="inprogressFlag"></app-inProgress>
             </div>
         </div>
     </div>
     <div class="accordion-item">
-        <div id="collapseApproved" class="accordion-collapse collapse" data-bs-parent="#accordionExampleOne">
+        <div id="collapseAssigned" [ngClass]="{'collapse show': assignedFlag,'collapse': !assignedFlag}" data-bs-parent="#accordionExampleOne">
             <div class="accordion-body">
-                <app-approvedRequest></app-approvedRequest>
+                <app-assignedRequests *ngIf="assignedFlag"></app-assignedRequests>
             </div>
         </div>
     </div>
     <div class="accordion-item">
-        <div id="collapseRejected" class="accordion-collapse collapse" data-bs-parent="#accordionExampleOne">
+        <div id="collapseApproved" [ngClass]="{'collapse show': approvedFlag,'collapse': !approvedFlag}" data-bs-parent="#accordionExampleOne">
             <div class="accordion-body">
-                <app-rejectedRequest></app-rejectedRequest>
+                <app-approvedRequest *ngIf="approvedFlag"></app-approvedRequest>
+            </div>
+        </div>
+    </div>
+    <div class="accordion-item">
+        <div id="collapseRejected" [ngClass]="{'collapse show': rejectFlag,'collapse': !rejectFlag}" data-bs-parent="#accordionExampleOne">
+            <div class="accordion-body">
+                <app-rejectedRequest *ngIf="rejectFlag"></app-rejectedRequest>
             </div>
         </div>
     </div>

@@ -18,7 +18,6 @@ export class MakeServiceRequestComponent implements OnInit {
   selectService:number=0;
   isResponseSent: boolean = true;
   errorMap = new Map<string, string>();
-  showInProgressComponent: boolean = false;
 
   makeReqObj: any = {
     category: '',
@@ -81,7 +80,6 @@ export class MakeServiceRequestComponent implements OnInit {
     if (this.isResponseSent) {
       this._sharedService.makeServiceRequest(this.makeReqObj).subscribe({
         next: (response: any) => {
-          this.showInProgressComponent = true;
           Swal.fire({
             position: "center",
             icon: "success",
@@ -89,7 +87,6 @@ export class MakeServiceRequestComponent implements OnInit {
             showConfirmButton: false,
             timer: 1500
             });
-          this.scrollToElement('inProgressComponent');
         },
         error: (err) => {
           console.error('Failed to make service request', err);
@@ -97,12 +94,6 @@ export class MakeServiceRequestComponent implements OnInit {
       });
 
       }
-    }
-    public scrollToElement(elementId: string) {
-       const element = document.getElementById(elementId);
-       if (element) {
-       element.scrollIntoView({ behavior: 'smooth', block: 'center' });
-    }
     }
 
   public clearForm(): void {

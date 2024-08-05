@@ -100,11 +100,19 @@
                           <textarea class="form-control border-2" id="description" rows="5" [(ngModel)]="editReqObjPayload.requestDescription" name="description" required aria-required="true"></textarea>
                       </div>
                   </div>
+                  <div *ngIf="setEditMsgFlag">
+                    <div class="alert alert-success" tabindex="0" role="alert">
+                      Do you want to save changes?
+                    </div>
+                    <div class="d-flex justify-content-end">
+                      <button type="button" class="btn btn-outline-success" title="Reject Ticket" (click)="saveChanges()" data-bs-dismiss="modal" tabindex="0" aria-label="Reject button">Confirm</button>
+                    </div>
+                  </div>
               </form>
           </div>
           <div class="modal-footer">
               <button type="button" class="btn btn-dark col-2" data-bs-dismiss="modal" aria-label="Close">Close</button>
-              <button type="button" class="btn btn-success col-2" (click)="saveChanges()" aria-label="Save Changes">Save</button>
+              <button type="button" class="btn btn-success col-2" (click)="setEditFlag()"  aria-label="Save Changes">Save</button>
           </div>
       </div>
   </div>
@@ -135,12 +143,25 @@
                       </select>
                       <i class="fas fa-caret-down dropdown-icon"></i>
                     </div>
-                  </div>
-                  
+                </div>
+                <div class="mt-2">
+                    <div class="alert alert-danger" *ngIf="errorMap.has('setSubmitErrorMessage')" tabindex="0" role="alert">
+                        {{errorMap.get('setSubmitErrorMessage')}}
+                      </div>
+                </div>               
+                <div *ngIf="setSubmitMsgFlag" class="mt-2">
+                    <div class="alert alert-success" tabindex="0" role="alert">
+                      Do you want to assign request?
+                    </div>
+                    <div class="d-flex col-12 justify-content-end">
+                        <button type="button" class="btn btn-outline-secondary col-2 me-1" (click)="setSubmitFlag()" aria-label="Back">Back</button>
+                        <button type="button col-2" class="btn btn-outline-success" title="Reject Ticket" (click)="assignTicket()" data-bs-dismiss="modal" tabindex="0" aria-label="Reject button">Assign</button>
+                    </div>
+                </div>                 
               </div>
-              <div class="d-flex justify-content-end">
-                  <button type="button" class="btn btn-dark col-2 me-1" data-bs-dismiss="modal" aria-label="Close">Close</button>
-                  <button type="button" class="btn btn-success col-2" (click)="assignTicket()" aria-label="Submit Ticket">Submit</button>
+              <div class="d-flex justify-content-end" *ngIf="!setSubmitMsgFlag">
+                  <button type="button" class="btn btn-secondary col-2 me-1" data-bs-dismiss="modal" aria-label="Close">Close</button>
+                  <button type="button" class="btn btn-success col-2" (click)="setSubmitFlag()" aria-label="Submit Ticket">Submit</button>
               </div>
           </div>
       </div>

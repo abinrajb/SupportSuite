@@ -10,12 +10,17 @@ import { SharedService } from '../../shared.service';
 export class AdminDashboardComponent implements OnInit {
 
   allRequestCount: any ={}
+  dashboardFlag:boolean = false;
+  NewServiceRequestFlag:boolean = true;
+  newAdminFlag:boolean = false;
+  NewServiceCategoryFlag:boolean = false;
+  recordFlag:boolean = false;
 
   constructor(private _router: Router, private _sharedService: SharedService) { }
 
   ngOnInit() {
-    this.checkUserAuthentication()
-    this.getAllRequestCount()
+    this.checkUserAuthentication();
+    this.getAllRequestCount();
   }
 
   private checkUserAuthentication(): void {
@@ -25,9 +30,6 @@ export class AdminDashboardComponent implements OnInit {
     }
   }
 
-  public goToMakeServiceRequest() {
-    this._router.navigate(['homepage/makeReq']);
-  }
 
   private getAllRequestCount(): void{
     this._sharedService.getAllRequestCount().subscribe({
@@ -43,5 +45,28 @@ export class AdminDashboardComponent implements OnInit {
     public handleChildEvent(data: any) {
         this.getAllRequestCount();
     }
+
+    public componentActivate(elementId: string) {
+
+        this.dashboardFlag = false;
+        this.NewServiceRequestFlag = false;
+        this.newAdminFlag = false;
+        this.NewServiceCategoryFlag = false;
+        this.recordFlag = false;
+
+        if (elementId === "Dashboard") {
+            this.dashboardFlag = true;
+        } else if (elementId === "createService") {
+            this.NewServiceRequestFlag = true;
+        } else if (elementId === "NewServiceCategory") {
+            this.NewServiceCategoryFlag= true;
+        } else if (elementId === "NewAdmin") {
+            this.newAdminFlag = true;
+        } else if (elementId === "Records") {
+            this.recordFlag = true;
+        }
+    }
+    
+   
 
 }

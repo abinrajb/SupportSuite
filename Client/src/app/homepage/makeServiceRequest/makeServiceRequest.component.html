@@ -11,14 +11,14 @@
             </select>
             <i class="fas fa-caret-down dropdown-icon"></i>
         </div>
-        <div id="emailHelp" class="form-text">select a category from the drop down to continue<span class="text-danger">*</span></div>
+        <div id="emailHelp" class="form-text"><span class="text-danger">*</span>Select a category from the drop down to continue</div>
     </div>
     <div class="mb-3">
         <label for="serviceDescription" class="form-label border-2" aria-label="Service Description">Description</label>
         <textarea class="form-control border-2" name="serviceDescription" [(ngModel)]="makeReqObj.requestDescription"
-                  id="serviceDescription" required aria-required="true" placeholder="service Description"
+                  id="serviceDescription" required aria-required="true" placeholder="Service Description"
                   aria-label="Describe your service request"></textarea>
-        <div id="descriptionlabeldown" class="form-text">Description should be below 200 characters<span class="text-danger">*</span></div>
+        <div id="descriptionlabeldown" class="form-text"><span class="text-danger">*</span>Description should be below 200 characters</div>
         <div *ngIf="errorMap.has('descriptionErrorMessage')" class="text-danger">
           {{errorMap.get('descriptionErrorMessage')}}
         </div>
@@ -30,12 +30,8 @@
         <button class="btn btn-secondary me-2 col-2" type="button" (click)="clearForm()" aria-label="Clear Form" title="Clear the form">
             <i class="bi bi-trash"></i>clear 
         </button>
-        <button class="btn btn-primary col-2" type="submit" (click)="addInProgress();scrollToElement('inProgressComponent')" aria-label="Add Service Request" title="Create a new service request">
+        <button class="btn btn-primary col-2" type="submit" (click)="addInProgress()" aria-label="Add Service Request" title="Create a new service request">
             <i class="bi bi-check2"></i>submit 
         </button>
     </div>
   </form>
-
-  <div *ngIf="showInProgressComponent">
-    <app-inProgress id="inProgressComponent"></app-inProgress>
-</div>

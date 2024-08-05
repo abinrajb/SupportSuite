@@ -22,6 +22,9 @@ export class InProgressComponent implements OnInit {
   totalPages: number = 0;
   errorMap = new Map<string, string>();
   isResponseSent: boolean = true;
+  setEditMsgFlag: boolean =false;
+  setSubmitMsgFlag: boolean = false;
+  selectAdminAlertFlag: boolean =false;
   categories: Category[] = [];
   administrator: Admins[] = [];
   allRequestCount: any ={};
@@ -142,6 +145,10 @@ export class InProgressComponent implements OnInit {
         };
     }
 
+    public setEditFlag(): void{
+        this.setEditMsgFlag=!this.setEditMsgFlag;
+    }
+
     public saveChanges(): void {
         if (!this.editReqObjPayload.requestDescription) {
             this.displayErrorMessage('descriptionErrorMessage', 'Please provide a description to continue.');
@@ -188,6 +195,15 @@ export class InProgressComponent implements OnInit {
         console.error('Failed to delete ticket', err);
         }
     });
+    }
+
+    public setSubmitFlag(): void{
+        if(this.assignTicketObj.assignedTo===0){
+            this.displayErrorMessage('setSubmitErrorMessage', 'Please select an admin to continue.');
+            return;
+        }
+        this.errorMap.delete('setSubmitErrorMessage');
+        this.setSubmitMsgFlag=!this.setSubmitMsgFlag;
     }
 
     public assignTicket(): void {

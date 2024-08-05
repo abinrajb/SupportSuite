@@ -15,7 +15,7 @@
                 </button>
             </div>
         </nav>
-
+ 
         <!-- Sidebar -->
         <nav class="col-md-3 col-lg-2 d-md-block bg-dark sidebar d-none d-md-block" aria-label="Sidebar">
             <div class="position-sticky">
@@ -23,11 +23,6 @@
                     <li class="nav-item">
                         <a class="nav-link ms-1" (click)="setActive(1)" [ngClass]="{ 'active-link': activeButtonHome }" routerLink="indexPage" routerLinkActive="active" aria-current="page">
                              Home<i class="fas fa-home ms-2"></i>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link ms-1" (click)="setActive(2)" [ngClass]="{ 'active-link': activeButtonCSR }" routerLink="makeReq" routerLinkActive="active">
-                            Create Request<i class="fas fa-plus-circle ms-2"></i> 
                         </a>
                     </li>
                     <li class="nav-item ms-1">
@@ -38,10 +33,10 @@
                     <li>
                     </li>
                 </ul>
-                
+               
             </div>
         </nav>
-
+ 
         <!-- Secondary Navbar for Smaller Screens -->
         <nav class="navbar navbar-dark bg-dark d-md-none mt-5" aria-label="Secondary navigation bar">
             <div class="container-fluid">
@@ -51,17 +46,12 @@
                 <div class="collapse navbar-collapse" id="navbarSidebar">
                     <ul class="navbar-nav">
                         <li class="nav-item">
-                            <a class="nav-link active ms-1" routerLink="indexPage" routerLinkActive="active" aria-current="page">
+                            <a class="nav-link active ms-1" (click)="setActive(1)" [ngClass]="{ 'active-link': activeButtonHome }" routerLink="indexPage" routerLinkActive="active" aria-current="page">
                                  Home<i class="fas fa-home ms-2"></i>
                             </a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link ms-1" routerLink="makeReq" routerLinkActive="active">
-                                Create Request<i class="fas fa-plus-circle ms-2"></i> 
-                            </a>
-                        </li>
                         <li class="nav-item ms-1">
-                            <a *ngIf="isAdmin()" routerLink="AdminDashboard" class="nav-link" id="AdminDashboardLink" aria-label="button to access admin dashboard" tabindex="0">
+                            <a *ngIf="isAdmin()" (click)="setActive(3)" [ngClass]="{ 'active-link': activeButtonAD }" routerLink="AdminDashboard" class="nav-link" id="AdminDashboardLink" aria-label="button to access admin dashboard" tabindex="0">
                                 Admin Dashboard<i class="fas fa-tachometer-alt ms-2"></i>
                             </a>
                         </li>
@@ -69,14 +59,10 @@
                 </div>
             </div>
         </nav>
-
+ 
         <!-- Main Content -->
         <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4" style="margin-top: 70px;" aria-label="Main content area">
             <router-outlet></router-outlet>
         </main>
     </div>
 </div>
-
-
-
-

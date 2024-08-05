@@ -1,13 +1,15 @@
 <div class="card mb-3">
     <div class="card-header d-flex justify-content-between">
         <h3>Create New Service Request</h3>
-        <a class="btn btn-success" (click)="goToMakeServiceRequest()" tabindex="0" routerLinkActive="active">Create New Service Request</a>
+        <button class="btn btn-success" (click)="componentActivate('createService')" tabindex="0" aria-label="Create new service request"
+            data-bs-toggle="collapse" data-bs-target="#collapseNewService" aria-expanded="false" aria-controls="collapseNewService" title="Show new service">
+            Create New Service Request
+        </button>
     </div>
 </div>
-
 <div class="row justify-content-between m-3">
     <div class="btn-group d-flex" role="group">
-        <button class="btn btn-dark position-relative rounded col-2 me-3" tabindex="0" routerLinkActive="active" data-bs-toggle="collapse" 
+        <button class="btn btn-dark position-relative rounded col-2 me-3" tabindex="0" (click)="componentActivate('Dashboard')" routerLinkActive="active" data-bs-toggle="collapse" 
         data-bs-target="#collapseDashboard" aria-expanded="false" aria-controls="collapseDashboard" title="Show dashboard">
          Dashboard
          <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
@@ -15,16 +17,16 @@
              <span class="visually-hidden">unread messages</span>
          </span>
         </button>
-        <button type="button" class="btn btn-dark rounded position-relative col-2 me-3" 
+        <button type="button" class="btn btn-dark rounded position-relative col-2 me-3" (click)="componentActivate('Records')"
         data-bs-toggle="collapse" data-bs-target="#collapseRecords" aria-expanded="false" aria-controls="collapseRecords" title="Show Records">
             Records
         </button>
-        <button class="btn btn-dark position-relative rounded col-2 me-3" tabindex="0" routerLinkActive="active" data-bs-toggle="collapse"
+        <button class="btn btn-dark position-relative rounded col-2 me-3" (click)="componentActivate('NewAdmin')" tabindex="0" routerLinkActive="active" data-bs-toggle="collapse"
         data-bs-target="#collapseNewAdmin" aria-expanded="false" aria-controls="collapseNewAdmin" title="Show create admin field">
             New Admin
         </button>
-        <button class="btn btn-dark rounded col-2" tabindex="0" routerLinkActive="active" data-bs-toggle="collapse" 
-        data-bs-target="#collapseNewService" aria-expanded="false" aria-controls="collapseNewService" title="Show add new service type">
+        <button class="btn btn-dark rounded col-2" tabindex="0" (click)="componentActivate('NewServiceCategory')" routerLinkActive="active" data-bs-toggle="collapse" 
+        data-bs-target="#collapseNewServiceCategory" aria-expanded="false" aria-controls="collapseNewService" title="Show add new service type">
             New service type
         </button>
     </div>
@@ -33,30 +35,37 @@
 
 <div class="accordion" id="accordionExampleOne">
     <div class="accordion-item">
-        <div id="collapseNewAdmin" class="accordion-collapse collapse" data-bs-parent="#accordionExampleOne">
+        <div id="collapseNewService" class="collapse show" [ngClass]="{'collapse':!NewServiceRequestFlag}" data-bs-parent="#accordionExampleOne">
             <div class="accordion-body">
-                <app-newAdmin></app-newAdmin>
+                <app-makeServiceRequest *ngIf="NewServiceRequestFlag"></app-makeServiceRequest>
             </div>
         </div>
     </div>
     <div class="accordion-item">
-        <div id="collapseNewService" class="accordion-collapse collapse" data-bs-parent="#accordionExampleOne">
+        <div id="collapseNewAdmin" [ngClass]="{'collapse show': newAdminFlag,'collapse':!newAdminFlag}" data-bs-parent="#accordionExampleOne">
             <div class="accordion-body">
-                <app-addService></app-addService>
+                <app-newAdmin *ngIf="newAdminFlag"></app-newAdmin>
             </div>
         </div>
     </div>
     <div class="accordion-item">
-        <div id="collapseDashboard" class="accordion-collapse collapse show" data-bs-parent="#accordionExampleOne">
+        <div id="collapseNewServiceCategory" [ngClass]="{'collapse show': NewServiceCategoryFlag,'collapse':!NewServiceCategoryFlag}" data-bs-parent="#accordionExampleOne">
             <div class="accordion-body">
-                <app-dashBoard (myEvent)="handleChildEvent($event)"></app-dashBoard>
+                <app-addService *ngIf="NewServiceCategoryFlag"></app-addService>
             </div>
         </div>
     </div>
     <div class="accordion-item">
-        <div id="collapseRecords" class="accordion-collapse collapse" data-bs-parent="#accordionExampleOne">
+        <div id="collapseDashboard" [ngClass]="{'collapse show':dashboardFlag,'collapse':!dashboardFlag}" data-bs-parent="#accordionExampleOne">
             <div class="accordion-body">
-                <app-history></app-history>
+                <app-dashBoard *ngIf="dashboardFlag" (myEvent)="handleChildEvent($event)"></app-dashBoard>
+            </div>
+        </div>
+    </div>
+    <div class="accordion-item">
+        <div id="collapseRecords" [ngClass]="{'collapse show':recordFlag,'collapse':!recordFlag}" data-bs-parent="#accordionExampleOne">
+            <div class="accordion-body">
+                <app-history *ngIf="recordFlag"></app-history>
             </div>
         </div>
     </div>
